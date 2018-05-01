@@ -9,42 +9,68 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 public class Parser {
-    public int colms, rows, finalInst, initPop, maxPop, comfortSens, mu, delta, rho;
-    public Point initialPoint, finalPoint;
-    public List<List<Object>> specialCosts;
-    public List<Point> obstacles;
+    private Document document;
 
-    public void read(String filePath) throws ParserConfigurationException, IOException, SAXException {
+    Parser(String filePath) throws IOException, SAXException, ParserConfigurationException {
         File xmlFile = new File(filePath);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.parse(xmlFile);
-        NodeList nodeList;
-        int coordX, coordY;
+        document = builder.parse(xmlFile);
+    }
 
-        nodeList = document.getElementsByTagName("simulation");
-        finalInst = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("finalinst").getTextContent());
-        initPop = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("initpop").getTextContent());
-        maxPop = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("maxpop").getTextContent());
-        comfortSens = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("comfortsens").getTextContent());
+    public int readNumberOfRows() {
+        return Integer.valueOf(document.getElementsByTagName("grid").item(0).getAttributes().getNamedItem("rowsnb").getTextContent());
+    }
 
-        nodeList = document.getElementsByTagName("grid");
-        colms = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("colsnb").getTextContent());
-        rows = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("rowsnb").getTextContent());
+    public int readNumberOfColumns() {
+        return Integer.valueOf(document.getElementsByTagName("grid").item(0).getAttributes().getNamedItem("colsnb").getTextContent());
+    }
 
-        nodeList = document.getElementsByTagName("initialpoint");
-        coordX = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("xinitial").getTextContent());
-        coordY = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("yinitial").getTextContent());
-        initialPoint = new Point(coordX, coordY);
+    public int readFinalInstant() {
+        return Integer.valueOf(document.getElementsByTagName("simulation").item(0).getAttributes().getNamedItem("finalinst").getTextContent());
+    }
 
-        nodeList = document.getElementsByTagName("finalpoint");
-        coordX = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("xfinal").getTextContent());
-        coordY = Integer.valueOf(nodeList.item(0).getAttributes().getNamedItem("yfinal").getTextContent());
-        finalPoint = new Point(coordX, coordY);
+    public int readInitialPopulation() {
+        return Integer.valueOf(document.getElementsByTagName("simulation").item(0).getAttributes().getNamedItem("initpop").getTextContent());
+    }
 
-        nodeList = document.getElementsByTagName("zone");
-        specialCosts = new ArrayList<>();
+    public int readMaxPopulation() {
+        return Integer.valueOf(document.getElementsByTagName("simulation").item(0).getAttributes().getNamedItem("maxpop").getTextContent());
+    }
+
+    public int readComfortSens() {
+        return Integer.valueOf(document.getElementsByTagName("simulation").item(0).getAttributes().getNamedItem("comfortsens").getTextContent());
+    }
+
+    public int readMu() {
+        return Integer.valueOf(document.getElementsByTagName("death").item(0).getAttributes().getNamedItem("param").getTextContent());
+    }
+
+    public int readRho() {
+        return Integer.valueOf(document.getElementsByTagName("reproduction").item(0).getAttributes().getNamedItem("param").getTextContent());
+    }
+
+    public int readDelta() {
+        return Integer.valueOf(document.getElementsByTagName("move").item(0).getAttributes().getNamedItem("param").getTextContent());
+    }
+
+    public Point readInitialPoint() {
+        int coordX = Integer.valueOf(document.getElementsByTagName("initialpoint").item(0).getAttributes().getNamedItem("xinitial").getTextContent());
+        int coordY = Integer.valueOf(document.getElementsByTagName("initialpoint").item(0).getAttributes().getNamedItem("yinitial").getTextContent());
+        return new Point(coordX, coordY);
+    }
+
+    public Point readFinalPoint() {
+        int coordX = Integer.valueOf(document.getElementsByTagName("finalpoint").item(0).getAttributes().getNamedItem("xfinal").getTextContent());
+        int coordY = Integer.valueOf(document.getElementsByTagName("finalpoint").item(0).getAttributes().getNamedItem("yfinal").getTextContent());
+        return new Point(coordX, coordY);
+    }
+
+    public List<List<Object>> readSpecialCosts() {
+        List<List<Object>> specialZones = new ArrayList<>();
         List<Object> list;
+        int coordX, coordY;
+        NodeList nodeList = document.getElementsByTagName("zone");
         for (int i = 0; i < nodeList.getLength(); i++) {
             list = new ArrayList<>();
             coordX = Integer.valueOf(nodeList.item(i).getAttributes().getNamedItem("xinitial").getTextContent());
@@ -54,23 +80,24 @@ public class Parser {
             coordY = Integer.valueOf(nodeList.item(i).getAttributes().getNamedItem("yfinal").getTextContent());
             list.add(new Point(coordX, coordY));
             list.add(Integer.valueOf(nodeList.item(i).getTextContent()));
-            specialCosts.add(list);
+            specialZones.add(list);
         }
+        return specialZones;
+    }
 
-        nodeList = document.getElementsByTagName("obstacle");
-        obstacles = new ArrayList<>();
+    public List<Point> readObstacles() {
+        List<Point> obstacles = new ArrayList<>();
+        NodeList nodeList = document.getElementsByTagName("obstacle");
+        int coordX, coordY;
         for (int i = 0; i < nodeList.getLength(); i++) {
             coordX = Integer.valueOf(nodeList.item(i).getAttributes().getNamedItem("xpos").getTextContent());
             coordY = Integer.valueOf(nodeList.item(i).getAttributes().getNamedItem("ypos").getTextContent());
             obstacles.add(new Point(coordX, coordY));
         }
-
-        mu = Integer.valueOf(document.getElementsByTagName("death").item(0).getAttributes().getNamedItem("param").getTextContent());
-        rho = Integer.valueOf(document.getElementsByTagName("reproduction").item(0).getAttributes().getNamedItem("param").getTextContent());
-        delta = Integer.valueOf(document.getElementsByTagName("move").item(0).getAttributes().getNamedItem("param").getTextContent());
+        return obstacles;
     }
 
-    public void printObservation(int obsN, int instant, int events, int size, boolean hitFinalP, List<Point> path, int cost, int comfort) {
+    public void printObservation(int obsN, int instant, int events, int size, boolean hitFinalP, List<Point> path, int cost, double comfort) {
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "Observation " + obsN + ":", "", ""));
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Present instant:", instant));
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Number of realized events:", events));

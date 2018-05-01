@@ -1,10 +1,12 @@
 package ist.oop.project;
 
 public class Death implements Event {
-    private int mu;
-    public double time;
+    private int mu; //?
+    private Individual host;
+    private double time;
 
-    Death(int mu, double time) {
+    Death(Individual host, int mu, double time) { //?
+        this.host = host;
         this.mu = mu;
         this.time = time;
     }
@@ -12,5 +14,15 @@ public class Death implements Event {
     @Override
     public void execute(double comfort) {
 
+    }
+
+    @Override
+    public double getTime() {
+        return time;
+    }
+
+    @Override
+    public Individual getHost() {
+        return host;
     }
 }
