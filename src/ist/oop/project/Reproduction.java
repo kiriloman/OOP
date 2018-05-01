@@ -1,5 +1,8 @@
 package ist.oop.project;
 
+// Evento Reproduction tem um host que é o individuo a quem o evento ta ligado e tem tempo que
+// é o tempo de execuçao.
+// Como instanciar? Execute fica vazio? E o rho?
 public class Reproduction implements Event {
     private int rho; //?
     private double time;

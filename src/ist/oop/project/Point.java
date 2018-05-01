@@ -1,5 +1,6 @@
 package ist.oop.project;
 
+//Classe Point para um facil representaçao de pontos.
 public class Point {
     private int x, y;
 

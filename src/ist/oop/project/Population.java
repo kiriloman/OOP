@@ -3,6 +3,7 @@ package ist.oop.project;
 import java.util.ArrayList;
 import java.util.List;
 
+//Classe Population com cenas basicas
 public class Population {
     public List<Individual> individuals;
     public int size;
