@@ -2,6 +2,7 @@ package ist.oop.project;
 
 import java.util.List;
 
+//Classe Grid que nao sei como vamos usar
 public class Grid {
     public int colms, rows;
     public List<List<Object>> specialCosts;

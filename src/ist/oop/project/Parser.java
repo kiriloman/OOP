@@ -8,6 +8,9 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
+
+// Classe Parser. Vai ler ficheiro XML e printar sempre que necessario cenas pedidas no projeto.
+// Em principio ta acabado
 public class Parser {
     private Document document;
 

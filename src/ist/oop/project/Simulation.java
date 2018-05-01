@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//Classe Simulation. Pensei em por o main aqui. mas pode-se mudar.
+//Vai simular obviamente.
 public class Simulation {
     private static int mu, delta, rho, cols, rows, initialPop, maxPop, finalInst, comfortSens;
     private static Point initialPoint, finalPoint;
@@ -19,6 +21,7 @@ public class Simulation {
         simulate();
     }
 
+    // retira toda a informaçao necessario do ficheiro XML
     private static void parseFile(String filePath) throws ParserConfigurationException, SAXException, IOException {
         parser = new Parser(filePath);
         mu = parser.readMu();
@@ -36,6 +39,7 @@ public class Simulation {
         obstacles = parser.readObstacles();
     }
 
+    // simula
     private static void simulate() {
         Population population = new Population(initialPop);
         int observationNum = 1, numberOfEvents = 0, bestCost = 0;
