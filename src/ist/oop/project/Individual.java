@@ -1,5 +1,7 @@
 package ist.oop.project;
 
+// Classe Individual.
+// So tem cenas basicas. É instanciado com um id.
 public class Individual {
     private double comfort;
     private int id;
