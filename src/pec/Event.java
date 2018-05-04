@@ -1,4 +1,6 @@
-package ist.oop.project;
+package pec;
+
+import population.Individual;
 
 // interface dos Eventos.
 // como definir execute?

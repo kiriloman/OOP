@@ -1,4 +1,4 @@
-package ist.oop.project;
+package population;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ public class Population {
     public List<Individual> individuals;
     public int size;
 
-    Population(int numOfIndividuals) {
+    public Population(int numOfIndividuals) {
         size = numOfIndividuals;
         individuals = new ArrayList<>();
         for (int i = 0; i < numOfIndividuals; i++) {

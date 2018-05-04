@@ -1,5 +1,8 @@
-package ist.oop.project;
+package simulation;
 
+import grid.Point;
+import population.Population;
+import main.Parser;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;

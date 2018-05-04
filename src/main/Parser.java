@@ -1,10 +1,12 @@
-package ist.oop.project;
+package main;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.*;
+
+import grid.Point;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -14,7 +16,7 @@ import org.xml.sax.SAXException;
 public class Parser {
     private Document document;
 
-    Parser(String filePath) throws IOException, SAXException, ParserConfigurationException {
+    public Parser(String filePath) throws IOException, SAXException, ParserConfigurationException {
         File xmlFile = new File(filePath);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();

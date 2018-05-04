@@ -1,16 +1,18 @@
-package ist.oop.project;
+package pec;
 
-// Evento Reproduction tem um host que é o individuo a quem o evento ta ligado e tem tempo que
+import population.Individual;
+
+// Evento Move tem um host que é o individuo a quem o evento ta ligado e tem tempo que
 // é o tempo de execuçao.
-// Como instanciar? Execute fica vazio? E o rho?
-public class Reproduction implements Event {
-    private int rho; //?
+// Como instanciar? Execute fica vazio? E o delta?
+public class Move implements Event {
+    private int delta; //?
     private double time;
     private Individual host;
 
-    Reproduction(Individual host, int rho) { //?
+    Move(Individual host, int delta) { //?
         this.host = host;
-        this.rho = rho;
+        this.delta = delta;
     }
 
     @Override

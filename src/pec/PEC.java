@@ -1,4 +1,6 @@
-package ist.oop.project;
+package pec;
+
+import population.Individual;
 
 import java.util.ArrayList;
 import java.util.List;

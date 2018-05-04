@@ -1,4 +1,6 @@
-package ist.oop.project;
+package pec;
+
+import population.Individual;
 
 // Evento Death tem um host que é o individuo a quem o evento ta ligado e tem tempo que
 // é o tempo de execuçao.

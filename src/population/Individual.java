@@ -1,4 +1,4 @@
-package ist.oop.project;
+package population;
 
 // Classe Individual.
 // So tem cenas basicas. É instanciado com um id.
