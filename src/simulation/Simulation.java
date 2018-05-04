@@ -13,7 +13,11 @@ import java.util.List;
 //Classe Simulation. Pensei em por o main aqui. mas pode-se mudar.
 //Vai simular obviamente.
 public class Simulation {
-    private static int mu, delta, rho, cols, rows, initialPop, maxPop, finalInst, comfortSens;
+    public static int mu, delta, rho, cols, rows, initialPop, maxPop, finalInst, comfortSens,
+            observationNum, instant, numOfEvents;
+    public static boolean finalPointHit;
+    public static List<Point> bestPath;
+    public static double bestPathCost, bestPathComfort;
     private static Point initialPoint, finalPoint;
     private static List<List<Object>> specialCostZones;
     private static List<Point> obstacles;

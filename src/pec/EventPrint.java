@@ -1,8 +1,7 @@
 package pec;
 
-import grid.Point;
-
-import java.util.List;
+import population.Population;
+import simulation.Simulation;
 
 public class EventPrint extends Event {
 
@@ -10,13 +9,13 @@ public class EventPrint extends Event {
         super(time);
     }
 
-    public void execute(int obsN, int instant, int events, int size, boolean hitFinalP, List<Point> path, int cost, double comfort) {
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "Observation " + obsN + ":", "", ""));
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Present instant:", instant));
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Number of realized events:", events));
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Population size:", size));
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Final point has been hit:", hitFinalP));
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Path of the best fit individual:", path.toString().replace("[", "{").replace("]", "}")));
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Cost/Comfort:", (double) cost/comfort));
+    public void execute() {
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "Observation " + Simulation.observationNum + ":", "", ""));
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Present instant:", Simulation.instant));
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Number of realized events:", Simulation.numOfEvents));
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Population size:", Population.size));
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Final point has been hit:", Simulation.finalPointHit));
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Path of the best fit individual:", Simulation.bestPath.toString().replace("[", "{").replace("]", "}")));
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Cost/Comfort:", Simulation.bestPathCost/Simulation.bestPathComfort));
     }
 }
