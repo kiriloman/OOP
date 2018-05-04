@@ -5,19 +5,27 @@ import java.util.List;
 
 //Classe Population com cenas basicas
 public class Population {
-    public List<Individual> individuals;
-    public int size;
+    public static List<Individual> individuals;
+    public static int size;
+    public static int nextChildId;
 
-    public Population(int numOfIndividuals) {
-        size = numOfIndividuals;
+    public Population(int numberOfIndividuals) {
+        size = numberOfIndividuals;
         individuals = new ArrayList<>();
-        for (int i = 0; i < numOfIndividuals; i++) {
-            individuals.add(new Individual(i));
+        nextChildId = numberOfIndividuals;
+        for (int i = 0; i < numberOfIndividuals; i++) {
+            addIndividual(new Individual(i));
         }
     }
 
-    public void addIndividual(Individual individual) {
+    public static void addIndividual(Individual individual) {
         individuals.add(individual);
         size++;
+        nextChildId++;
+    }
+
+    public static void removeIndividual(Individual individual) {
+        individuals.remove(individual);
+        size--;
     }
 }

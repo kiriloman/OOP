@@ -1,32 +1,17 @@
 package pec;
 
 import population.Individual;
+import population.Population;
 
-// Evento Reproduction tem um host que é o individuo a quem o evento ta ligado e tem tempo que
-// é o tempo de execuçao.
-// Como instanciar? Execute fica vazio? E o rho?
-public class Reproduction implements Event {
-    private int rho; //?
-    private double time;
-    private Individual host;
+public class Reproduction extends EventInd {
 
-    Reproduction(Individual host, int rho) { //?
-        this.host = host;
-        this.rho = rho;
+    public Reproduction(double time) {
+        super(time);
     }
 
     @Override
-    public void execute(double comfort) {
-
-    }
-
-    @Override
-    public double getTime() {
-        return time;
-    }
-
-    @Override
-    public Individual getHost() {
-        return host;
+    public void execute() {
+        System.out.println("Reproduction");
+        Population.addIndividual(new Individual(Population.nextChildId));
     }
 }

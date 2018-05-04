@@ -1,12 +1,16 @@
 package population;
 
-// Classe Individual.
-// So tem cenas basicas. É instanciado com um id.
+import grid.Point;
+
+import java.util.List;
+
 public class Individual {
     private double comfort;
     private int id;
+    private Point position;
+    private List<Point> path;
 
-    Individual(int id) {
+    public Individual(int id) {
         this.id = id;
     }
 
@@ -16,5 +20,29 @@ public class Individual {
         if (!(obj instanceof Individual)) return false;
         Individual other = (Individual) obj;
         return other.id == id;
+    }
+
+    public Point getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
+    }
+
+    public double getComfort() {
+        return comfort;
+    }
+
+    public void setComfort(double comfort) {
+        this.comfort = comfort;
+    }
+
+    public List<Point> getPath() {
+        return path;
+    }
+
+    public void addToPath(Point point) {
+        path.add(point);
     }
 }

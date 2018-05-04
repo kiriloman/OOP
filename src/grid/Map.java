@@ -11,18 +11,18 @@ public class Map implements Grid {
     public List<List<Object>> specialCosts;
     public List<Point> obstacles;
 
-    public HashMap<Point, ArrayList<Object>> map;
+    public static HashMap<Point, List<List<Object>>> map;
 
     public Map(int colms, int rows) {
         this.colms = colms;
         this.rows = rows;
-        this.map = new HashMap<Point, ArrayList<Object>>();
+        this.map = new HashMap<>();
         this.specialCosts = specialCosts;
         this.obstacles = obstacles;
     }
 
 
-    public void createGrid() {
+    /*public void createGrid() {
         for (int x = 1; x <= colms; x++) {
             for (int y = 1; y <= rows; y++) {
                 ArrayList<Object> adjList = new ArrayList<Object>();
@@ -92,7 +92,7 @@ public class Map implements Grid {
             }
         }
 
-    }
+    }*/
 
 
 }
