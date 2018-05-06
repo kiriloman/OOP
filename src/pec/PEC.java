@@ -1,6 +1,7 @@
 package pec;
 
 import population.Individual;
+import simulation.Simulation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +53,14 @@ public class PEC {
         Event event = eventQueue.get(0);
         eventQueue.remove(0);
         return event;
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+        for (int i = 0; i < eventQueue.size(); i++) {
+            str += "(" + eventQueue.get(i).getClass().getSimpleName() + ", " + ((EventInd)eventQueue.get(i)).getHost().getId() + ") ";
+        }
+        return str;
     }
 }

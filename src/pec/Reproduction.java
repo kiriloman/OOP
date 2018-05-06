@@ -11,7 +11,7 @@ public class Reproduction extends EventInd {
 
     @Override
     public void execute() {
-        System.out.println("Reproduction");
-        Population.addIndividual(new Individual(Population.nextChildId));
+        //System.out.println("Reproduction"  + " time: " + this.getTime());
+        //Population.addIndividual(new Individual(Population.nextChildId));
     }
 }

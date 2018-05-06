@@ -3,6 +3,7 @@ package main;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.xml.parsers.*;
 
@@ -71,21 +72,76 @@ public class Parser {
         return new Point(coordX, coordY);
     }
 
-    public List<List<Object>> readSpecialCosts() {
-        List<List<Object>> specialZones = new ArrayList<>();
-        List<Object> list;
-        int coordX, coordY;
+    public HashMap<List<Point>, Integer> readSpecialCosts() {
+        HashMap<List<Point>, Integer> specialZones = new HashMap<>();
+        List<Point> edge;
+        int coordX, coordY, cost;
+        Point fromPoint, toPoint;
         NodeList nodeList = document.getElementsByTagName("zone");
         for (int i = 0; i < nodeList.getLength(); i++) {
-            list = new ArrayList<>();
             coordX = Integer.valueOf(nodeList.item(i).getAttributes().getNamedItem("xinitial").getTextContent());
             coordY = Integer.valueOf(nodeList.item(i).getAttributes().getNamedItem("yinitial").getTextContent());
-            list.add(new Point(coordX, coordY));
+            fromPoint = new Point(coordX, coordY);
             coordX = Integer.valueOf(nodeList.item(i).getAttributes().getNamedItem("xfinal").getTextContent());
             coordY = Integer.valueOf(nodeList.item(i).getAttributes().getNamedItem("yfinal").getTextContent());
-            list.add(new Point(coordX, coordY));
-            list.add(Integer.valueOf(nodeList.item(i).getTextContent()));
-            specialZones.add(list);
+            toPoint = new Point(coordX, coordY);
+            cost = Integer.valueOf(nodeList.item(i).getTextContent());
+            //adiciona a "linha" de baixo do rectangulo
+            for (int j = fromPoint.getX(); j < toPoint.getX(); j++) {
+                edge = new ArrayList<>();
+                edge.add(new Point(j, fromPoint.getY()));
+                edge.add(new Point(j + 1, fromPoint.getY()));
+                //se a aresta ja ta com extra custo, verifica-se se o novo custo e maior.
+                //se for alteramos o custo
+                if (specialZones.containsKey(edge)) {
+                    if (specialZones.get(edge) < cost)
+                        specialZones.put(edge, cost);
+                } else {
+                    specialZones.put(edge, cost);
+                }
+            }
+            //adiciona a "linha" de cima do rectangulo
+            for (int j = fromPoint.getX(); j < toPoint.getX(); j++) {
+                edge = new ArrayList<>();
+                edge.add(new Point(j, toPoint.getY()));
+                edge.add(new Point(j + 1, toPoint.getY()));
+                //se a aresta ja ta com extra custo, verifica-se se o novo custo e maior.
+                //se for alteramos o custo
+                if (specialZones.containsKey(edge)) {
+                    if (specialZones.get(edge) < cost)
+                        specialZones.put(edge, cost);
+                } else {
+                    specialZones.put(edge, cost);
+                }
+            }
+            //adiciona a "linha" vertical esquerda
+            for (int j = fromPoint.getY(); j < toPoint.getY(); j++) {
+                edge = new ArrayList<>();
+                edge.add(new Point(fromPoint.getX(), j));
+                edge.add(new Point(fromPoint.getX(), j + 1));
+                //se a aresta ja ta com extra custo, verifica-se se o novo custo e maior.
+                //se for alteramos o custo
+                if (specialZones.containsKey(edge)) {
+                    if (specialZones.get(edge) < cost)
+                        specialZones.put(edge, cost);
+                } else {
+                    specialZones.put(edge, cost);
+                }
+            }
+            //adiciona a "linha" vertical direita
+            for (int j = fromPoint.getY(); j < toPoint.getY(); j++) {
+                edge = new ArrayList<>();
+                edge.add(new Point(toPoint.getX(), j));
+                edge.add(new Point(toPoint.getX(), j + 1));
+                //se a aresta ja ta com extra custo, verifica-se se o novo custo e maior.
+                //se for alteramos o custo
+                if (specialZones.containsKey(edge)) {
+                    if (specialZones.get(edge) < cost)
+                        specialZones.put(edge, cost);
+                } else {
+                    specialZones.put(edge, cost);
+                }
+            }
         }
         return specialZones;
     }
