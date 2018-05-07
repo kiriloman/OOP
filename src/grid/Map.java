@@ -11,16 +11,18 @@ public class Map implements Grid {
     public int colms, rows;
     public HashMap<List<Point>, Integer> specialCosts;
     public List<Point> obstacles;
+    public static Point finalPoint;
 
     public static HashMap<Point, List<List<Object>>> map;
 
     //talvez seja melhor receber specialCosts e obstacles
-    public Map(int colms, int rows, List<Point> obstacles, HashMap<List<Point>, Integer> specialCosts) {
+    public Map(int colms, int rows, List<Point> obstacles, HashMap<List<Point>, Integer> specialCosts, Point finalPoint) {
         this.colms = colms;
         this.rows = rows;
         this.map = new HashMap<>();
         this.specialCosts = specialCosts;
         this.obstacles = obstacles;
+        this.finalPoint = finalPoint;
     }
 
     //Refactorar depois

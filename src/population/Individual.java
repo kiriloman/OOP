@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Individual {
     private double comfort;
+    private double deathTime;
     private int id, cost;
     private Point position;
     private List<Point> path;
@@ -19,6 +20,7 @@ public class Individual {
         comfort = 0;
         cost = 0;
         position = null;
+        deathTime = Integer.MAX_VALUE;
     }
 
     @Override
@@ -83,5 +85,13 @@ public class Individual {
 
     public void setCostPath(List<Integer> costPath){
         this.costPath = costPath;
+    }
+
+    public void setDeathTime(double deathTime) {
+        this.deathTime = deathTime;
+    }
+
+    public double getDeathTime() {
+        return deathTime;
     }
 }

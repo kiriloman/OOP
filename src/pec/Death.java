@@ -9,6 +9,12 @@ public class Death extends EventInd {
     }
 
     @Override
+    public void addToPec() {
+        this.getHost().setDeathTime(this.getTime());
+        PEC.addEvent(this);
+    }
+
+    @Override
     public void execute() {
         //System.out.println("Died host number:" + this.getHost().getId() + " time: " + this.getTime());
         Population.removeIndividual(this.getHost());

@@ -3,20 +3,23 @@ package population;
 import grid.Point;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import pec.EventInd;
 import pec.PEC;
 
-//Classe Population com cenas basicas
 public class Population {
     public static List<Individual> individuals;
     public static int size;
     public static int nextChildId;
+    public static List<Point> bestPath;
+    public static double bestPathCost, bestPathComfort;
+    public static boolean finalPointHit;
 
     public Population(int numberOfIndividuals) {
+        finalPointHit = false;
+        bestPathCost = Integer.MIN_VALUE;
+        bestPathComfort = 0;
         size = 0;
         individuals = new ArrayList<>();
         nextChildId = 0;
@@ -37,12 +40,12 @@ public class Population {
         size--;
     }
 
-    public static void killIndividual(PEC pec, Individual individual) {
+    public static void killIndividual(Individual individual) {
         removeIndividual(individual);
-        for (int i = 0; i < pec.eventQueue.size(); i++) {
-            if (pec.eventQueue.get(i) instanceof EventInd) {
-                if (((EventInd) pec.eventQueue.get(i)).getHost().equals(individual)) {
-                    pec.eventQueue.remove(i);
+        for (int i = 0; i < PEC.eventQueue.size(); i++) {
+            if (PEC.eventQueue.get(i) instanceof EventInd) {
+                if (((EventInd) PEC.eventQueue.get(i)).getHost().equals(individual)) {
+                    PEC.eventQueue.remove(i);
                     i--;
                 }
             }

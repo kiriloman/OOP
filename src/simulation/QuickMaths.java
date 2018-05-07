@@ -2,12 +2,9 @@ package simulation;
 
 import java.util.Random;
 
-import grid.Point;
 import population.Individual;
 
 public class QuickMaths {
-    
-
 	 //dist function
     public static int dist(Individual z) {
         return Math.abs(z.getPosition().getX() - Simulation.finalPoint.getX()) + Math.abs(z.getPosition().getY() - Simulation.finalPoint.getY());
@@ -22,16 +19,19 @@ public class QuickMaths {
         }
     }
     
-    public static double moveParameter(double comfort, int delta, Random random ){
-    	return -((1 - Math.log(comfort)) * delta) * Math.log(1 - random.nextDouble());
+    public static double moveParameter(double comfort){
+        Random random = new Random();
+    	return -((1 - Math.log(comfort)) * Simulation.delta) * Math.log(1 - random.nextDouble());
     }
     
-    public static double deathParameter(double comfort, int mu, Random random ){
-    	return -((1 - Math.log(1 - comfort)) * mu) * Math.log(1 - random.nextDouble());
+    public static double deathParameter(double comfort){
+        Random random = new Random();
+    	return -((1 - Math.log(1 - comfort)) * Simulation.mu) * Math.log(1 - random.nextDouble());
     }
     
-    public static double reproductionParameter(double comfort, int rho, Random random ){
-    	return -((1 - Math.log(comfort)) * rho) * Math.log(1 - random.nextDouble());
+    public static double reproductionParameter(double comfort){
+        Random random = new Random();
+    	return -((1 - Math.log(comfort)) * Simulation.rho) * Math.log(1 - random.nextDouble());
     }
     
     public static double calculateComfort(Individual hst){

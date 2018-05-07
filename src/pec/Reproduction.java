@@ -11,6 +11,12 @@ public class Reproduction extends EventInd {
     }
 
     @Override
+    public void addToPec() {
+        if (this.getTime() < this.getHost().getDeathTime())
+            PEC.addEvent(this);
+    }
+
+    @Override
     public void execute() {
         //System.out.println("Reproduction"  + " time: " + this.getTime());
         //Population.addIndividual(new Individual(Population.nextChildId));
@@ -38,5 +44,18 @@ public class Reproduction extends EventInd {
         double childComfort = QuickMaths.calculateComfort(child);
         child.setComfort(childComfort);
         Population.addIndividual(child);
+        Move cMove = new Move(this.getTime() + QuickMaths.moveParameter(childComfort));
+        Reproduction cReproduction = new Reproduction(this.getTime() + QuickMaths.reproductionParameter(childComfort));
+        Death cDeath = new Death(this.getTime() + QuickMaths.deathParameter(childComfort));
+        cMove.setHost(child);
+        cReproduction.setHost(child);
+        cDeath.setHost(child);
+        cDeath.addToPec();
+        cMove.addToPec();
+        cReproduction.addToPec();
+        //add reproduction of parent
+        Reproduction pReproduction = new Reproduction(this.getTime() + QuickMaths.moveParameter(parent.getComfort()));
+        pReproduction.setHost(parent);
+        pReproduction.addToPec();
     }
 }

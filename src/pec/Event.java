@@ -11,6 +11,10 @@ public class Event {
 
     }
 
+    public void addToPec() {
+        PEC.addEvent(this);
+    }
+
     public double getTime(){
         return time;
     }
