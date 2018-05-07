@@ -27,16 +27,16 @@ public class Reproduction extends EventInd {
         }
         //posiçao do child
         child.setPosition(child.getPath().get(sizeChildPath - 1));
-        //comfort do child
-        double childComfort = QuickMaths.calculateComfort(child);
-        child.setComfort(childComfort);
+
         //costPath do child
         for (int j = 0; j < sizeChildPath; j++) {
             child.addToCostPath(parent.getCostPath().get(j));
         }
         //cost do child
         child.setCost(child.getCostPath().get(sizeChildPath - 1));
-
+        //comfort do child
+        double childComfort = QuickMaths.calculateComfort(child);
+        child.setComfort(childComfort);
         Population.addIndividual(child);
     }
 }

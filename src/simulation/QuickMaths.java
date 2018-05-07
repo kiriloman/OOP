@@ -23,18 +23,18 @@ public class QuickMaths {
     }
     
     public static double moveParameter(double comfort, int delta, Random random ){
-    	return (-(1 - Math.log(comfort) * delta) * Math.log(1 - random.nextDouble()));
+    	return -((1 - Math.log(comfort)) * delta) * Math.log(1 - random.nextDouble());
     }
     
     public static double deathParameter(double comfort, int mu, Random random ){
-    	return (-(1 - Math.log(1 - comfort) * mu) * Math.log(1 - random.nextDouble()));
+    	return -((1 - Math.log(1 - comfort)) * mu) * Math.log(1 - random.nextDouble());
     }
     
     public static double reproductionParameter(double comfort, int rho, Random random ){
-    	return -(1 - Math.log(comfort) * rho) * Math.log(1 - random.nextDouble());
+    	return -((1 - Math.log(comfort)) * rho) * Math.log(1 - random.nextDouble());
     }
     
     public static double calculateComfort(Individual hst){
-    	return ((double) Math.pow(1 - (hst.getCost() - QuickMaths.length(hst) + 2) / ((Simulation.cmax - 1) * (QuickMaths.length(hst)) + 3), Simulation.comfortSens)) * Math.pow(1 - ((double) QuickMaths.dist(hst) / ((double) Simulation.colms + Simulation.rows + 1)), Simulation.comfortSens);
+    	return (Math.pow(1 - ((double) hst.getCost() - (double) QuickMaths.length(hst) + (double) 2) / (((double) Simulation.cmax - (double) 1) * ((double) QuickMaths.length(hst)) + (double) 3), (double) Simulation.comfortSens)) * Math.pow((double) 1 - ((double) QuickMaths.dist(hst) / ((double) Simulation.colms + (double) Simulation.rows + (double) 1)), (double) Simulation.comfortSens);
     }
 }

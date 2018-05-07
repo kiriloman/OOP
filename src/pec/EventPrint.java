@@ -17,7 +17,7 @@ public class EventPrint extends Event {
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Final point has been hit:", Simulation.finalPointHit));
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Path of the best fit individual:", Simulation.bestPath.toString().replace("[", "{").replace("]", "}")));
         if (Simulation.finalPointHit)
-            System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Cost:", Simulation.bestPathCost));
+            System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Cost:", (int) Simulation.bestPathCost));
         else
             System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Comfort:", Simulation.bestPathComfort));
     }

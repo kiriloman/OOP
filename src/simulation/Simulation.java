@@ -137,10 +137,10 @@ public class Simulation {
             //epidemic strikes!
             for (int i = 0; i < Population.size; i++) {
                 if (!survivors.contains(Population.individuals.get(i).getId()) && (Population.individuals.get(i).getComfort() <= Math.random())) {
-                    population.killIndividual(pec, Population.individuals.get(i));
+                    Population.killIndividual(pec, Population.individuals.get(i));
+                    i--;
                 }
             }
-
         }
     }
 
@@ -170,11 +170,8 @@ public class Simulation {
 
     // simula
     public static void simulate() throws IOException, SAXException, ParserConfigurationException {
-        int time = 0;
         random = new Random();
         numOfEvents = 0; //////////////////////////CATA//////////////////////
-        double d = 20;
-        double auxTime = 0;//////////////////////////CATA//////////////////////
         observationNum = 0;//////////////////////////CATA//////////////////////
 
         parseFile("src/data1.xml");
@@ -206,7 +203,7 @@ public class Simulation {
 
             if (event instanceof Reproduction) {
                 event.execute();
-
+                Individual parent = ((Reproduction) event).getHost();
                 Individual child = Population.individuals.get(Population.size - 1);
                 double childComfort = child.getComfort();
                 Move cMove = new Move(event.getTime() + QuickMaths.moveParameter(childComfort, delta, random));
@@ -218,6 +215,10 @@ public class Simulation {
                 addEventToPec(cDeath);
                 addEventToPec(cMove);
                 addEventToPec(cReproduction);
+                //add reproduction of parent
+                Reproduction pReproduction = new Reproduction(event.getTime() + QuickMaths.moveParameter(parent.getComfort(), delta, random));
+                pReproduction.setHost(parent);
+                addEventToPec(pReproduction);
                 numOfEvents++;
             }
 

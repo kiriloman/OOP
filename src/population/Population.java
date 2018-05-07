@@ -37,7 +37,7 @@ public class Population {
         size--;
     }
 
-    public void killIndividual(PEC pec, Individual individual) {
+    public static void killIndividual(PEC pec, Individual individual) {
         removeIndividual(individual);
         for (int i = 0; i < pec.eventQueue.size(); i++) {
             if (pec.eventQueue.get(i) instanceof EventInd) {
