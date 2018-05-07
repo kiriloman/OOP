@@ -17,5 +17,6 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
         new Simulation().simulate();
+        new Parser("src/data1.xml").printResult(Simulation.bestPath);
     }
 }

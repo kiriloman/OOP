@@ -26,7 +26,7 @@ public class Simulation {
     public static boolean finalPointHit;
     public static List<Point> bestPath;
     public static double bestPathCost, bestPathComfort, instant;
-    private static Point initialPoint, finalPoint;
+    public static Point initialPoint, finalPoint;
     private static HashMap<List<Point>, Integer> specialCostZones;
     private static List<Point> obstacles;
     private static Parser parser;
@@ -42,19 +42,6 @@ public class Simulation {
         bestPath = new ArrayList<>();
     }
 
-    //dist function
-    private static int dist(Individual z) {
-        return Math.abs(z.getPosition().getX() - finalPoint.getX()) + Math.abs(z.getPosition().getY() - finalPoint.getY());
-    }
-
-    //length(z)-number of edges transversed by the individual z
-    private static int length(Individual z) {
-        if (z.getPath() == null) {
-            return 0;
-        } else {
-            return z.getPath().size();
-        }
-    }
 
     // retira toda a informaçao necessario do ficheiro XML
     public static void parseFile(String filePath) throws ParserConfigurationException, SAXException, IOException {
@@ -79,6 +66,22 @@ public class Simulation {
         map.createGrid();
     }
 
+
+    public static void createEventObservations() {
+        int time = 0, auxTime = 0;
+        double d = 20;
+        double timeInterval = (double) finalInst / d;
+        for (int t = time + 1; t <= finalInst; t++) {
+            /*intervalo para imprimir*/
+            if (t == auxTime + timeInterval) {
+                EventPrint ep = new EventPrint(t);
+                addEventToPec(ep);
+                auxTime = t;
+            }
+        }
+    }
+
+
     public static void initializePopulation() {
 
         population = new Population(initialPop);
@@ -93,13 +96,13 @@ public class Simulation {
             hst.addToPath(initialPoint);
 
 
-            comfort = ((double) Math.pow(1 - (hst.getCost() - length(hst) + 2) / ((cmax - 1) * length(hst) + 3), comfortSens)) * Math.pow(1 - ((double) dist(hst) / ((double) colms + rows + 1)), comfortSens);
+            comfort = QuickMaths.calculateComfort(hst);
             hst.setComfort(comfort);
 
 
-            Move m = new Move(-(1 - Math.log(comfort) * delta) * Math.log(1 - random.nextDouble()));
-            Reproduction r = new Reproduction(-(1 - Math.log(comfort) * rho) * Math.log(1 - random.nextDouble()));
-            Death d = new Death(-(1 - Math.log(1 - comfort) * mu) * Math.log(1 - random.nextDouble()));
+            Move m = new Move(QuickMaths.moveParameter(comfort, delta, random));
+            Reproduction r = new Reproduction(QuickMaths.reproductionParameter(comfort, rho, random));
+            Death d = new Death(QuickMaths.deathParameter(comfort, mu, random));
 
             d.setHost(hst);
             m.setHost(hst);
@@ -115,8 +118,6 @@ public class Simulation {
 
     public static void epidemic() {
         if (Population.size >= maxPop) {
-            System.out.println(Population.size);
-            System.out.println("Epidemic");
             List<List<Object>> individualsComfort = new ArrayList<>();
             for (Individual i : Population.individuals) {
                 List<Object> indComf = new ArrayList<>();
@@ -143,6 +144,30 @@ public class Simulation {
         }
     }
 
+    public static void updateBestPath(Individual hst) {
+        if (hst.getPosition().equals(finalPoint)) {
+            if (!finalPointHit) {
+                finalPointHit = true;
+                bestPathCost = Integer.MAX_VALUE;
+                bestPathComfort = -1;
+                bestPath = new ArrayList<>();
+            }
+            if (hst.getCost() < bestPathCost) {
+                bestPathCost = hst.getCost();
+                bestPathComfort = hst.getComfort();
+                bestPath = new ArrayList<>(hst.getPath());
+            }
+        } else {
+            if (!finalPointHit) {
+                if (hst.getComfort() > bestPathComfort) {
+                    bestPathCost = hst.getCost();
+                    bestPathComfort = hst.getComfort();
+                    bestPath = new ArrayList<>(hst.getPath());
+                }
+            }
+        }
+    }
+
     // simula
     public static void simulate() throws IOException, SAXException, ParserConfigurationException {
         int time = 0;
@@ -155,131 +180,66 @@ public class Simulation {
         parseFile("src/data1.xml");
         createMap();
         initializePopulation();
-        double timeInterval = (double) finalInst / d;
+        createEventObservations();
 
-        ////////IMPRIMIR///////////////////////////////////////////////////////////////CATA//////////////
-        for (int t = time + 1; t <= finalInst; t++) {
-            /*intervalo para imprimir*/
-            if (t == auxTime + timeInterval) {
-                EventPrint ep = new EventPrint(t);
-                addEventToPec(ep);
-                auxTime = t;
-            }
-        }
 
-        while (pec.eventQueue.size() != 0 && Population.size != 0) {
+        while (pec.eventQueue.size() != 0) {
             epidemic();
             Event event = pec.getEvent();
             Individual hst;
 
-
             if (event instanceof Move) {
                 hst = ((Move) event).getHost();
-                comfort = ((double) Math.pow(1 - (hst.getCost() - length(hst) + 2) / ((cmax - 1) * length(hst) + 3), comfortSens)) * Math.pow(1 - ((double) dist(hst) / ((double) colms + rows + 1)), comfortSens);
+                comfort = QuickMaths.calculateComfort(hst);
                 event.execute();
 
 
                 //Verifica se a nova posiçao e o ponto final
                 //faz update da bestpath se o individuo chegou ao ponto final e tem uma path melhor
-                if (hst.getPosition().equals(finalPoint)) {
-                    if (!finalPointHit)
-                        finalPointHit = true;
-                    if (hst.getCost() < bestPathCost) {
-                        bestPathCost = hst.getCost();
-                        bestPathComfort = hst.getComfort();
-                        bestPath = new ArrayList<>(hst.getPath());
-                    }
-                }
+                updateBestPath(hst);
 
-                Move mvs = new Move(event.getTime() + (-(1 - Math.log(comfort) * delta) * Math.log(1 - random.nextDouble())));
-                //System.out.println("MOVE TIME: " + mvs.getTime());
+                Move mvs = new Move(event.getTime() + QuickMaths.moveParameter(comfort, delta, random));
                 mvs.setHost(((Move) event).getHost());
-                //System.out.println(((Move) event).getHost() + " host " + ((Move) event).getHost().getPosition() + " position");
                 addEventToPec(mvs);
-                numOfEvents++; ////////////////////////////////CATA//////////////
+                numOfEvents++;
             }
 
             if (event instanceof Reproduction) {
                 event.execute();
-                //por no evento reproduction dalguma forma
-                Individual parent = ((Reproduction) event).getHost();
 
-                Individual child = new Individual(Population.nextChildId);
-                //path do child
-                double parameter1 = (double) (((double) 0.9) * ((double) parent.getPath().size()));
-                double parameter2 = (double) (((double) 0.1) * ((double) parent.getComfort()));
-                int sizeChildPath = (int) Math.ceil(parameter1 + parameter2);
-                //rever com sublists
-                for (int j = 0; j < sizeChildPath; j++) {
-                    child.addToPath(parent.getPath().get(j));
-                }
-                //posiçao do child
-                child.setPosition(child.getPath().get(sizeChildPath - 1));
-                //comfort do child
-                double childComfort = ((double) Math.pow(1 - (child.getCost() - length(child) + 2) / ((cmax - 1) * length(child) + 3), comfortSens)) * Math.pow(1 - ((double) dist(child) / ((double) colms + rows + 1)), comfortSens);
-                child.setComfort(childComfort);
-                //costPath do child
-                for (int j = 0; j < sizeChildPath; j++) {
-                    child.addToCostPath(parent.getCostPath().get(j));
-                }
-                //cost do child
-                child.setCost(child.getCostPath().get(sizeChildPath - 1));
-
-                Population.addIndividual(child);
-                Move cMove = new Move(event.getTime() + (-(1 - Math.log(comfort) * delta) * Math.log(1 - random.nextDouble())));
-                Reproduction cReproduction = new Reproduction(event.getTime() + (-(1 - Math.log(comfort) * rho) * Math.log(1 - random.nextDouble())));
-                Death cDeath = new Death(event.getTime() + (-(1 - Math.log(1 - comfort) * mu) * Math.log(1 - random.nextDouble())));
+                Individual child = Population.individuals.get(Population.size - 1);
+                double childComfort = child.getComfort();
+                Move cMove = new Move(event.getTime() + QuickMaths.moveParameter(childComfort, delta, random));
+                Reproduction cReproduction = new Reproduction(event.getTime() + QuickMaths.reproductionParameter(childComfort, rho, random));
+                Death cDeath = new Death(event.getTime() + QuickMaths.deathParameter(childComfort, mu, random));
                 cMove.setHost(child);
                 cReproduction.setHost(child);
                 cDeath.setHost(child);
                 addEventToPec(cDeath);
                 addEventToPec(cMove);
                 addEventToPec(cReproduction);
-                numOfEvents++; ////////////////////////////////CATA//////////////
+                numOfEvents++;
             }
 
             if (event instanceof Death) {
                 event.execute();
-                numOfEvents++; ////////////////////////////////CATA//////////////
+                numOfEvents++;
             }
 
-            if (event instanceof EventPrint) {
-                observationNum = observationNum + 1;//supos que numero de observações seria o numero de prints feitos até ao momento.
+
+            if ((event instanceof EventPrint)) {
+                observationNum = observationNum + 1;
                 instant = event.getTime();
-                if (!finalPointHit) {
-                    Individual bestIndividual = Population.getBestFitIndividual();
-                    if (bestIndividual.getComfort() > bestPathComfort) {
-                        bestPath = new ArrayList<>(bestIndividual.getPath());
-                        bestPathComfort = bestIndividual.getComfort();
-                        bestPathCost = bestIndividual.getCost();
-                    }
-                }
                 event.execute();
-                if (!finalPointHit) {
-                    bestPath = new ArrayList<>();
-                    bestPathCost = Integer.MAX_VALUE;
-                    bestPathComfort = -1;
-                }
             }
         }
-        System.out.println("FIM");
     }
+
 
     //decides and adds event to pec
     private static void addEventToPec(Event event) {
         if (event.getTime() <= finalInst)
             pec.addEvent(event);
-    }
-
-    //update bestPath
-    private static void updateBestVars() {
-        for (Individual individual : population.individuals) {
-            if (individual.getCost() < bestPathCost) {
-                bestPathCost = individual.getCost();
-                bestPathComfort = individual.getComfort();
-                bestPath = individual.getPath();
-            }
-        }
     }
 
     //helps to sort the individuals by comfort in order to choose the first 5 when/if the epidemic strikes.

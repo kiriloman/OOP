@@ -48,20 +48,4 @@ public class Population {
             }
         }
     }
-
-    private static void sortByCost(List<Individual> lI) {
-        Collections.sort(lI, new Comparator<Individual>() {
-            @Override
-            public int compare(Individual o1, Individual o2) {
-                int o1Cost = o1.getCost();
-                int o2Cost = o2.getCost();
-                return (((int) o1Cost) - ((int) o2Cost));
-            }
-        });
-    }
-
-    public static Individual getBestFitIndividual() {
-        sortByCost(Population.individuals);
-        return Population.individuals.get(0);
-    }
 }
