@@ -9,7 +9,7 @@ public class EventPrint extends Event {
         super(time);
         observationNum = 0;
     }
-    
+
     public void execute() {
         observationNum++;
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "Observation " + observationNum + ":", "", ""));

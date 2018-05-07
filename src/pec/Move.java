@@ -43,10 +43,10 @@ public class Move extends EventInd {
         }
         //altera se a posicao do host para newposition
         this.getHost().setPosition(newPosition);
-        //adiciona se o ponto a Path do host
-        this.getHost().addToPath(newPosition);
         //actualiza se o costPath
         this.getHost().addToCostPath(this.getHost().getCost() + costToAdd);
+        //adiciona se o ponto a Path do host
+        this.getHost().addToPath(newPosition);
         //atualiza se o comfort
         //rever isto e a criaçao doutro move (comfort certo?)
         this.getHost().setComfort(QuickMaths.calculateComfort(this.getHost()));
