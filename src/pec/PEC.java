@@ -5,13 +5,13 @@ import java.util.List;
 
 // Classe PEC. Tem uma eventQueue e adiçao de eventos a eventQueue.
 public class PEC {
-    public static List<Event> eventQueue;
     private static int finalInstant;
+    public static List<Event> eventQueue;
     public static int numberOfEvents;
 
     public PEC(int finalInstant) {
+        PEC.finalInstant = finalInstant;
         eventQueue = new ArrayList<>();
-        this.finalInstant = finalInstant;
         numberOfEvents = 0;
     }
 

@@ -24,62 +24,66 @@ public class Move extends EventInd {
 
     @Override
     public void execute() {
-        List<List<Object>> adjacentNodes = Map.map.get(this.getHost().getPosition());
+        Individual host = this.getHost();
+        List<List<Object>> adjacentNodes = Map.map.get(host.getPosition());
         Random random = new Random();
         int randomIndex = random.nextInt(adjacentNodes.size());
-        Point newPosition = (Point) adjacentNodes.get(randomIndex).get(0);
         int costToAdd = (int) adjacentNodes.get(randomIndex).get(1);
+        Point newPosition = (Point) adjacentNodes.get(randomIndex).get(0);
         //se o newpoint vai implicar um ciclo, removemos o ciclo
-        if (this.getHost().getPath().contains(newPosition)) {
-            int pos = this.getHost().getPath().indexOf(newPosition);
-            int initialPathLength = this.getHost().getPath().size();
-            for (int i = 0; i < initialPathLength - pos - 1; i++) {
-                this.getHost().getPath().remove(pos + 1);
-                this.getHost().getCostPath().remove(pos + 1);
-            }
-            this.getHost().setPosition(newPosition);
-            this.getHost().setCost(this.getHost().getCostPath().get(this.getHost().getCostPath().size() - 1));
-
-            this.getHost().setComfort(QuickMaths.calculateComfort(this.getHost()));
+        if (host.getPath().contains(newPosition)) {
+            int pos = host.getPath().indexOf(newPosition);
+            updateHost(newPosition, host.getPath().subList(0, pos + 1), host.getCostPath().subList(0, pos + 1));
         } else {
-
-            //altera se a posicao do host para newposition
-            this.getHost().setPosition(newPosition);
-            //actualiza se o costPath
-            //tmb atualiza cost
-            this.getHost().addToCostPath(this.getHost().getCost() + costToAdd);
-            //adiciona se o ponto a Path do host
-            this.getHost().addToPath(newPosition);
-            //atualiza se o comfort
-            this.getHost().setComfort(QuickMaths.calculateComfort(this.getHost()));
+            updateHost(newPosition, costToAdd);
         }
 
+        createAndAddNewMove();
+        updateBestPath(host);
+    }
+
+    private void updateHost(Point position, List<Point> path, List<Integer> costPath) {
+        Individual host = this.getHost();
+        host.setPath(path);
+        host.setCostPath(costPath);
+        host.setPosition(position);
+        host.setCost(host.getCostPath().get(host.getCostPath().size() - 1));
+        host.setComfort(QuickMaths.calculateComfort(host));
+    }
+
+    private void updateHost(Point position, int costToAdd) {
+        Individual host = this.getHost();
+        host.setPosition(position);
+        host.addToPath(position);
+        host.addToCostPath(host.getCost() + costToAdd);
+        host.setComfort(QuickMaths.calculateComfort(host));
+    }
+
+    private void createAndAddNewMove() {
         Move mvs = new Move(this.getTime() + QuickMaths.moveParameter(this.getHost().getComfort()));
         mvs.setHost(this.getHost());
         mvs.addToPec();
-
-        updateBestPath(this.getHost());
     }
 
-    private static void updateBestPath(Individual hst) {
-        if (hst.getPosition().equals(Map.finalPoint)) {
+    private void updateBestPath(Individual host) {
+        if (host.getPosition().equals(Map.getFinalPoint())) {
             if (!Population.finalPointHit) {
                 Population.finalPointHit = true;
                 Population.bestPathCost = Integer.MAX_VALUE;
                 Population.bestPathComfort = -1;
                 Population.bestPath = new ArrayList<>();
             }
-            if (hst.getCost() < Population.bestPathCost) {
-                Population.bestPathCost = hst.getCost();
-                Population.bestPathComfort = hst.getComfort();
-                Population.bestPath = new ArrayList<>(hst.getPath());
+            if (host.getCost() < Population.bestPathCost) {
+                Population.bestPathCost = host.getCost();
+                Population.bestPathComfort = host.getComfort();
+                Population.bestPath = new ArrayList<>(host.getPath());
             }
         } else {
             if (!Population.finalPointHit) {
-                if (hst.getComfort() > Population.bestPathComfort) {
-                    Population.bestPathCost = hst.getCost();
-                    Population.bestPathComfort = hst.getComfort();
-                    Population.bestPath = new ArrayList<>(hst.getPath());
+                if (host.getComfort() > Population.bestPathComfort) {
+                    Population.bestPathCost = host.getCost();
+                    Population.bestPathComfort = host.getComfort();
+                    Population.bestPath = new ArrayList<>(host.getPath());
                 }
             }
         }

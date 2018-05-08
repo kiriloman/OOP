@@ -5,38 +5,32 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-//Classe Grid que nao sei como vamos usar
 public class Map implements Grid {
-
-    public int colms, rows;
-    public HashMap<List<Point>, Integer> specialCosts;
-    public List<Point> obstacles;
-    public static Point finalPoint;
-
+    private HashMap<List<Point>, Integer> specialCosts;
+    private List<Point> obstacles;
+    private static int colms, rows;
+    private static Point finalPoint;
     public static HashMap<Point, List<List<Object>>> map;
 
-    //talvez seja melhor receber specialCosts e obstacles
     public Map(int colms, int rows, List<Point> obstacles, HashMap<List<Point>, Integer> specialCosts, Point finalPoint) {
-        this.colms = colms;
-        this.rows = rows;
-        this.map = new HashMap<>();
+        Map.colms = colms;
+        Map.rows = rows;
+        Map.finalPoint = finalPoint;
         this.specialCosts = specialCosts;
         this.obstacles = obstacles;
-        this.finalPoint = finalPoint;
+        map = new HashMap<>();
     }
 
-    //Refactorar depois
-    public int MaxCost() {
-        int max=1;
-        int newMax=0;
-        for(Integer i : specialCosts.values()) {
-            max=i;
-            if(max>newMax)
-                newMax=max;
+    public int edgeMaxCost() {
+        int maxCost = 0;
+        for (Integer i : specialCosts.values()) {
+            if (i > maxCost)
+                maxCost = i;
         }
-        return newMax;
+        return maxCost;
     }
 
+    @Override
     public void createGrid() {
         Point fromPoint, toPoint;
         List<List<Object>> adjList;
@@ -98,5 +92,9 @@ public class Map implements Grid {
         Collections.swap(edge, 0, 1);
         if (specialCosts.get(edge) != null) return specialCosts.get(edge);
         return 1;
+    }
+
+    public static Point getFinalPoint() {
+        return finalPoint;
     }
 }

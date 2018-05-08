@@ -1,4 +1,5 @@
 package grid;
 
-public interface Grid {
+interface Grid {
+    void createGrid();
 }

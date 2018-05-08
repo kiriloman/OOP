@@ -18,46 +18,51 @@ public class Reproduction extends EventInd {
 
     @Override
     public void execute() {
-        //System.out.println("Reproduction"  + " time: " + this.getTime());
-        //Population.addIndividual(new Individual(Population.nextChildId));
-        Individual parent = this.getHost();
+        Individual child = createChild();
+        createAndAddChildEvents(child);
+        createAndAddParentReproduction();
+    }
 
-        Individual child = new Individual(Population.nextChildId);
+    private Individual createChild() {
+        Individual parent = this.getHost();
         //path do child
-        double parameter1 = (double) (((double) 0.9) * ((double) parent.getPath().size()));
-        double parameter2 = (double) (((double) 0.1) * ((double) parent.getComfort()));
-        int sizeChildPath = (int) Math.ceil(parameter1 + parameter2);
-        //rever com sublists
-        for (int j = 0; j < sizeChildPath; j++) {
+        double parameter1 = 0.9 * ((double) parent.getPath().size());
+        double parameter2 = 0.1 * parent.getComfort();
+        int childPathLength = (int) Math.ceil(parameter1 + parameter2);
+        Individual child = new Individual(Population.nextChildId);
+        for (int j = 0; j < childPathLength; j++) {
             child.addToPath(parent.getPath().get(j));
         }
-        //posiçao do child
-        child.setPosition(child.getPath().get(sizeChildPath - 1));
-
+        child.setPosition(child.getPath().get(childPathLength - 1));
         //costPath do child
         //tambem cost do child
-        for (int j = 0; j < sizeChildPath; j++) {
+        for (int j = 0; j < childPathLength; j++) {
             child.addToCostPath(parent.getCostPath().get(j));
         }
-
-        //System.out.println("Parent: " + parent.getId() + " path: " + parent.getPath() + " costs: " + parent.getCostPath());
-        //System.out.println("Child:  " + child.getId() + " path: " + child.getPath() + " costs: " + child.getCostPath());
-        //comfort do child
-        double childComfort = QuickMaths.calculateComfort(child);
-        child.setComfort(childComfort);
+        child.setComfort(QuickMaths.calculateComfort(child));
         Population.addIndividual(child);
+        return child;
+    }
+
+    private void createAndAddChildEvents(Individual child) {
+        double childComfort = child.getComfort();
         Move cMove = new Move(this.getTime() + QuickMaths.moveParameter(childComfort));
         Reproduction cReproduction = new Reproduction(this.getTime() + QuickMaths.reproductionParameter(childComfort));
         Death cDeath = new Death(this.getTime() + QuickMaths.deathParameter(childComfort));
+
         cMove.setHost(child);
         cReproduction.setHost(child);
         cDeath.setHost(child);
+
         cDeath.addToPec();
         cMove.addToPec();
         cReproduction.addToPec();
-        //add reproduction of parent
-        Reproduction pReproduction = new Reproduction(this.getTime() + QuickMaths.moveParameter(parent.getComfort()));
-        pReproduction.setHost(parent);
+    }
+
+    private void createAndAddParentReproduction() {
+        Individual host = this.getHost();
+        Reproduction pReproduction = new Reproduction(this.getTime() + QuickMaths.moveParameter(host.getComfort()));
+        pReproduction.setHost(host);
         pReproduction.addToPec();
     }
 }

@@ -5,17 +5,14 @@ import simulation.Simulation;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.ArrayList;//remover
-import java.util.Collections;//remover
-import java.util.List;//remover
 
 public class Main {
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-        /*if (args.length != 1) {
+        if (args.length != 1) {
             System.out.println("Usage: Main <file.xml>");
             System.exit(1);
         }
-        new Simulation(args[0]).simulate();*/
-        new Simulation("src/data1.xml").simulate();
+        new Simulation(args[0]).simulate();
+        //new Simulation("src/data1.xml").simulate();
     }
 }

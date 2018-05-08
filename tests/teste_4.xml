@@ -1,4 +1,4 @@
-<simulation finalinst="1000" initpop="400" maxpop="500" comfortsens="3">
+<simulation finalinst="100" initpop="10" maxpop="500" comfortsens="3"> 
    <grid colsnb="10" rowsnb="12"/> 
    <initialpoint xinitial="1" yinitial="1"/> 
    <finalpoint xfinal="10" yfinal="12"/>
@@ -38,6 +38,6 @@
    <events>
       <death param="10"/>
       <reproduction param="1"/>
-      <move param="2"/>
+      <move param="1"/>
    </events>
 </simulation>

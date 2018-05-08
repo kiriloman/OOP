@@ -2,7 +2,6 @@ package simulation;
 
 import grid.Map;
 import grid.Point;
-import main.Parser;
 import org.xml.sax.SAXException;
 import pec.*;
 import population.Individual;
@@ -26,7 +25,7 @@ public class Simulation {
     public Simulation(String filePath) throws IOException, SAXException, ParserConfigurationException {
         parseFile(filePath);
         map = new Map(colms, rows, obstacles, specialCostZones, finalPoint);
-        maxEdgeCost = map.MaxCost();
+        maxEdgeCost = map.edgeMaxCost();
         population = new Population(initialPop);
         pec = new PEC(finalInst);
     }
