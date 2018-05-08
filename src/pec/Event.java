@@ -1,13 +1,19 @@
 package pec;
 
-public class Event {
-    public double time;
+import population.Individual;
 
-    public Event(double time) {
+public class Event {
+    private double time;
+
+    Event(double time) {
         this.time = time;
     }
 
     public void execute() {
+
+    }
+
+    public void removeIfItsHostDies(Individual individual) {
 
     }
 

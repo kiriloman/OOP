@@ -63,8 +63,17 @@ public class Individual {
         path.add(point);
     }
 
+    public void setCostPath(List<Integer> costPath){
+        this.costPath = costPath;
+    }
+
     public List<Integer> getCostPath(){
         return costPath;
+    }
+
+    public void addToCostPath(int cost) {
+        costPath.add(cost);
+        setCost(cost);
     }
 
     public void setCost(int cost) {
@@ -73,15 +82,6 @@ public class Individual {
 
     public int getCost(){
         return cost;
-    }
-
-    public void addToCostPath(int cost) {
-        costPath.add(cost);
-        this.cost = cost;
-    }
-
-    public void setCostPath(List<Integer> costPath){
-        this.costPath = costPath;
     }
 
     public void setDeathTime(double deathTime) {

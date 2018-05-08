@@ -1,12 +1,10 @@
 package population;
 
 import grid.Point;
+import pec.PEC;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import pec.EventInd;
-import pec.PEC;
 
 public class Population {
     public static List<Individual> individuals;
@@ -44,12 +42,7 @@ public class Population {
     public static void killIndividual(Individual individual) {
         removeIndividual(individual);
         for (int i = 0; i < PEC.eventQueue.size(); i++) {
-            if (PEC.eventQueue.get(i) instanceof EventInd) {
-                if (((EventInd) PEC.eventQueue.get(i)).getHost().equals(individual)) {
-                    PEC.eventQueue.remove(i);
-                    i--;
-                }
-            }
+            PEC.eventQueue.get(i).removeIfItsHostDies(individual);
         }
     }
 }

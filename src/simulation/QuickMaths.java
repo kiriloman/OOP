@@ -5,13 +5,13 @@ import java.util.Random;
 import population.Individual;
 
 public class QuickMaths {
-	 //dist function
-    public static int dist(Individual z) {
+    //dist function
+    private static int dist(Individual z) {
         return Math.abs(z.getPosition().getX() - Simulation.finalPoint.getX()) + Math.abs(z.getPosition().getY() - Simulation.finalPoint.getY());
     }
 
     //length(z)-number of edges transversed by the individual z
-    public static int length(Individual z) {
+    private static int length(Individual z) {
         if (z.getPath() == null) {
             return 0;
         } else {

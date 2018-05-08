@@ -16,7 +16,6 @@ public class Death extends EventInd {
 
     @Override
     public void execute() {
-        //System.out.println("Died host number:" + this.getHost().getId() + " time: " + this.getTime());
         Population.removeIndividual(this.getHost());
     }
 }

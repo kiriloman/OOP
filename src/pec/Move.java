@@ -24,9 +24,6 @@ public class Move extends EventInd {
 
     @Override
     public void execute() {
-        //Alterar cenas no Map para static
-        //Alterar map para HashMap<Point, List<List<Object>>> ou parecido
-       // System.out.println("Moooooving. host number " + this.getHost().getId() + " time: " + this.getTime());
         List<List<Object>> adjacentNodes = Map.map.get(this.getHost().getPosition());
         Random random = new Random();
         int randomIndex = random.nextInt(adjacentNodes.size());
@@ -36,11 +33,6 @@ public class Move extends EventInd {
         if (this.getHost().getPath().contains(newPosition)) {
             int pos = this.getHost().getPath().indexOf(newPosition);
             int initialPathLength = this.getHost().getPath().size();
-            //System.out.println("Host: " + this.getHost().getId() + " path: " + this.getHost().getPath());
-            //System.out.println("Before cost: " + this.getHost().getCost() + " before costpath: " + this.getHost().getCostPath());
-            //System.out.println(pos + " position " + initialPathLength + " initialpathlength");
-            //System.out.println(this.getHost().getPath());
-            //System.out.println(newPosition);
             for (int i = 0; i < initialPathLength - pos - 1; i++) {
                 this.getHost().getPath().remove(pos + 1);
                 this.getHost().getCostPath().remove(pos + 1);
@@ -49,15 +41,6 @@ public class Move extends EventInd {
             this.getHost().setCost(this.getHost().getCostPath().get(this.getHost().getCostPath().size() - 1));
 
             this.getHost().setComfort(QuickMaths.calculateComfort(this.getHost()));
-            //System.out.println(this.getHost().getPath());
-            //System.out.println("Inbetween cost: " + this.getHost().getCost() + " Inbetween costpath: " + this.getHost().getCostPath());
-            /*if (this.getHost().getCostPath().size() == 0){
-                this.getHost().addToCostPath(0);
-            }
-            else {
-                this.getHost().setCost(this.getHost().getCostPath().get(this.getHost().getCostPath().size() - 1));
-            }*/
-            //System.out.println("After cost: " + this.getHost().getCost() + " After costpath: " + this.getHost().getCostPath());
         } else {
 
             //altera se a posicao do host para newposition
