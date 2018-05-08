@@ -61,10 +61,6 @@ public class Individual {
 
     public void addToPath(Point point) {
         path.add(point);
-        if (costPath.size() == 0)
-            cost = 0;
-        else
-            cost = costPath.get(costPath.size() - 1);
     }
 
     public List<Integer> getCostPath(){
@@ -81,6 +77,7 @@ public class Individual {
 
     public void addToCostPath(int cost) {
         costPath.add(cost);
+        this.cost = cost;
     }
 
     public void setCostPath(List<Integer> costPath){

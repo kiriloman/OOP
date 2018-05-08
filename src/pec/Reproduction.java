@@ -35,11 +35,13 @@ public class Reproduction extends EventInd {
         child.setPosition(child.getPath().get(sizeChildPath - 1));
 
         //costPath do child
+        //tambem cost do child
         for (int j = 0; j < sizeChildPath; j++) {
             child.addToCostPath(parent.getCostPath().get(j));
         }
-        //cost do child
-        child.setCost(child.getCostPath().get(sizeChildPath - 1));
+
+        //System.out.println("Parent: " + parent.getId() + " path: " + parent.getPath() + " costs: " + parent.getCostPath());
+        //System.out.println("Child:  " + child.getId() + " path: " + child.getPath() + " costs: " + child.getCostPath());
         //comfort do child
         double childComfort = QuickMaths.calculateComfort(child);
         child.setComfort(childComfort);

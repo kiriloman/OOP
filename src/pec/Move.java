@@ -36,20 +36,40 @@ public class Move extends EventInd {
         if (this.getHost().getPath().contains(newPosition)) {
             int pos = this.getHost().getPath().indexOf(newPosition);
             int initialPathLength = this.getHost().getPath().size();
-            for (int i = 0; i < initialPathLength - pos; i++) {
-                this.getHost().getPath().remove(pos);
-                this.getHost().getCostPath().remove(pos);
+            //System.out.println("Host: " + this.getHost().getId() + " path: " + this.getHost().getPath());
+            //System.out.println("Before cost: " + this.getHost().getCost() + " before costpath: " + this.getHost().getCostPath());
+            //System.out.println(pos + " position " + initialPathLength + " initialpathlength");
+            //System.out.println(this.getHost().getPath());
+            //System.out.println(newPosition);
+            for (int i = 0; i < initialPathLength - pos - 1; i++) {
+                this.getHost().getPath().remove(pos + 1);
+                this.getHost().getCostPath().remove(pos + 1);
             }
+            this.getHost().setPosition(newPosition);
+            this.getHost().setCost(this.getHost().getCostPath().get(this.getHost().getCostPath().size() - 1));
+
+            this.getHost().setComfort(QuickMaths.calculateComfort(this.getHost()));
+            //System.out.println(this.getHost().getPath());
+            //System.out.println("Inbetween cost: " + this.getHost().getCost() + " Inbetween costpath: " + this.getHost().getCostPath());
+            /*if (this.getHost().getCostPath().size() == 0){
+                this.getHost().addToCostPath(0);
+            }
+            else {
+                this.getHost().setCost(this.getHost().getCostPath().get(this.getHost().getCostPath().size() - 1));
+            }*/
+            //System.out.println("After cost: " + this.getHost().getCost() + " After costpath: " + this.getHost().getCostPath());
+        } else {
+
+            //altera se a posicao do host para newposition
+            this.getHost().setPosition(newPosition);
+            //actualiza se o costPath
+            //tmb atualiza cost
+            this.getHost().addToCostPath(this.getHost().getCost() + costToAdd);
+            //adiciona se o ponto a Path do host
+            this.getHost().addToPath(newPosition);
+            //atualiza se o comfort
+            this.getHost().setComfort(QuickMaths.calculateComfort(this.getHost()));
         }
-        //altera se a posicao do host para newposition
-        this.getHost().setPosition(newPosition);
-        //actualiza se o costPath
-        this.getHost().addToCostPath(this.getHost().getCost() + costToAdd);
-        //adiciona se o ponto a Path do host
-        this.getHost().addToPath(newPosition);
-        //atualiza se o comfort
-        //rever isto e a criaçao doutro move (comfort certo?)
-        this.getHost().setComfort(QuickMaths.calculateComfort(this.getHost()));
 
         Move mvs = new Move(this.getTime() + QuickMaths.moveParameter(this.getHost().getComfort()));
         mvs.setHost(this.getHost());

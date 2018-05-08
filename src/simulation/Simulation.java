@@ -135,7 +135,7 @@ public class Simulation {
 
     // simula
     public static void simulate() throws IOException, SAXException, ParserConfigurationException {
-        parseFile("src/data1.xml");
+        parseFile("src/data4.xml");
         createMap();
         initializePopulation();
         createEventObservations();
