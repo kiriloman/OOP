@@ -12,15 +12,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.*;
 
-//Classe Simulation. Pensei em por o main aqui. mas pode-se mudar.
-//Vai simular obviamente.
 public class Simulation {
-    public static int mu, delta, rho, colms, rows, initialPop, maxPop, finalInst, comfortSens,
-            cmax; //rever isto
-    private static double comfort;
-    public static List<Point> bestPath;
-    public static double bestPathCost, bestPathComfort;
-    public static Point initialPoint, finalPoint;
+    static int mu, delta, rho, colms, rows, comfortSens, maxEdgeCost;
+    static Point initialPoint, finalPoint;
+    private static int initialPop, maxPop, finalInst;
     private static HashMap<List<Point>, Integer> specialCostZones;
     private static List<Point> obstacles;
     private static Parser parser;
@@ -28,16 +23,16 @@ public class Simulation {
     private static Map map;
     private static PEC pec;
 
-
-    public Simulation() {
-        bestPathCost = Integer.MAX_VALUE;
-        bestPathComfort = -1;
-        bestPath = new ArrayList<>();
+    public Simulation(String filePath) throws IOException, SAXException, ParserConfigurationException {
+        parseFile(filePath);
+        map = new Map(colms, rows, obstacles, specialCostZones, finalPoint);
+        maxEdgeCost = map.MaxCost();
+        population = new Population(initialPop);
+        pec = new PEC(finalInst);
     }
 
-
     // retira toda a informaçao necessario do ficheiro XML
-    public static void parseFile(String filePath) throws ParserConfigurationException, SAXException, IOException {
+    private static void parseFile(String filePath) throws ParserConfigurationException, SAXException, IOException {
         parser = new Parser(filePath);
         mu = parser.readMu();
         delta = parser.readDelta();
@@ -54,78 +49,67 @@ public class Simulation {
         obstacles = parser.readObstacles();
     }
 
-    public static void createMap() {
-        map = new Map(colms, rows, obstacles, specialCostZones, finalPoint);
+    private static void createMap() {
         map.createGrid();
     }
 
-
-    public static void createEventObservations() {
-        int time = 0, auxTime = 0;
-        double d = 20;
-        double timeInterval = (double) finalInst / d;
-        for (int t = time + 1; t <= finalInst; t++) {
-            /*intervalo para imprimir*/
-            if (t == auxTime + timeInterval) {
-                EventPrint ep = new EventPrint(t);
-                ep.addToPec();
-                auxTime = t;
+    private static void createAndAddPrintEvents() {
+        Event printEvent;
+        double timeInterval = (double) finalInst / 20;
+        for (double t = timeInterval; t <= finalInst; t++) {
+            if (t % timeInterval == 0) {
+                printEvent = new EventPrint(t);
+                printEvent.addToPec();
             }
         }
     }
 
+    private static void generateInitialEvents(Individual individual) {
+        Move m = new Move(QuickMaths.moveParameter(individual.getComfort()));
+        Reproduction r = new Reproduction(QuickMaths.reproductionParameter(individual.getComfort()));
+        Death d = new Death(QuickMaths.deathParameter(individual.getComfort()));
 
-    public static void initializePopulation() {
+        d.setHost(individual);
+        m.setHost(individual);
+        r.setHost(individual);
 
-        population = new Population(initialPop);
-        cmax = map.MaxCost();
-        pec = new PEC(finalInst);
+        d.addToPec();
+        m.addToPec();
+        r.addToPec();
+    }
+
+    private static void initializeSimulation() {
+        //creates map
+        createMap();
 
         for (int ind = 0; ind < population.size; ind++) {
             Individual individual = population.individuals.get(ind);
             individual.setPosition(initialPoint);
-            //mudar nome e talvez implementaçao no individual
-            individual.addToCostPath(0);
             individual.addToPath(initialPoint);
+            individual.addToCostPath(0);
+            individual.setComfort(QuickMaths.calculateComfort(individual));
 
-            comfort = QuickMaths.calculateComfort(individual);
-            individual.setComfort(comfort);
-
-            Move m = new Move(QuickMaths.moveParameter(comfort));
-            Reproduction r = new Reproduction(QuickMaths.reproductionParameter(comfort));
-            Death d = new Death(QuickMaths.deathParameter(comfort));
-
-            d.setHost(individual);
-            m.setHost(individual);
-            r.setHost(individual);
-
-            d.addToPec();
-            m.addToPec();
-            r.addToPec();
+            generateInitialEvents(individual);
         }
+
+        //creates print events and adds them to pec
+        createAndAddPrintEvents();
     }
 
-    public static void epidemic() {
+    private static void epidemic() {
         if (Population.size >= maxPop) {
-            List<List<Object>> individualsComfort = new ArrayList<>();
-            for (Individual i : Population.individuals) {
-                List<Object> indComf = new ArrayList<>();
-                indComf.add(i);
-                indComf.add(i.getComfort());
-                individualsComfort.add(indComf);
-            }
-
-            sort(individualsComfort);
+            //sorts individuals from best comfort to worst comfort
+            sort(Population.individuals);
 
             //creates the list of individuals that survive for sure
-            List<Integer> survivors = new ArrayList<>();
+            List<Individual> survivors = new ArrayList<>();
             for (int s = 0; s < 5; s++) {
-                survivors.add(((Individual) individualsComfort.get(s).get(0)).getId());
+                survivors.add(Population.individuals.get(s));
             }
 
             //epidemic strikes!
             for (int i = 0; i < Population.size; i++) {
-                if (!survivors.contains(Population.individuals.get(i).getId()) && (Population.individuals.get(i).getComfort() <= Math.random())) {
+                if (!survivors.contains(Population.individuals.get(i)) && (Population.individuals.get(i).getComfort() <= Math.random())) {
                     Population.killIndividual(Population.individuals.get(i));
                     i--;
                 }
@@ -133,29 +117,24 @@ public class Simulation {
         }
     }
 
+    //helps to sort the individuals by comfort in order to choose the first 5 when/if the epidemic strikes.
+    private static void sort(List<Individual> individuals) {
+        Collections.sort(individuals, (i1, i2) -> {
+            double comf1 = i1.getComfort();
+            double comf2 = i2.getComfort();
+            return Double.compare(comf2, comf1);
+        });
+    }
+
     // simula
-    public static void simulate() throws IOException, SAXException, ParserConfigurationException {
-        parseFile("src/data4.xml");
-        createMap();
-        initializePopulation();
-        createEventObservations();
+    public static void simulate() {
+        initializeSimulation();
 
         while (PEC.eventQueue.size() != 0) {
             epidemic();
             pec.executeEvent();
         }
-    }
 
-    //helps to sort the individuals by comfort in order to choose the first 5 when/if the epidemic strikes.
-    private static void sort(List<List<Object>> listOfLists) {
-        Collections.sort(listOfLists, new Comparator<List<Object>>() {
-            @Override
-            public int compare(List<Object> o1, List<Object> o2) {
-                Object o1Comf = o1.get(1);
-                Object o2Comf = o2.get(1);
-                return ((Double) o1Comf).compareTo((Double) o2Comf);
-            }
-        });
-        Collections.reverse(listOfLists);
+        parser.printResult(Population.bestPath);
     }
 }

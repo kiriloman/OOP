@@ -18,6 +18,7 @@ public class Population {
 
     public Population(int numberOfIndividuals) {
         finalPointHit = false;
+        bestPath = new ArrayList<>();
         bestPathCost = Integer.MIN_VALUE;
         bestPathComfort = 0;
         size = 0;

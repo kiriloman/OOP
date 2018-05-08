@@ -35,6 +35,6 @@ public class QuickMaths {
     }
     
     public static double calculateComfort(Individual hst){
-    	return (Math.pow(1 - ((double) hst.getCost() - (double) QuickMaths.length(hst) + (double) 2) / (((double) Simulation.cmax - (double) 1) * ((double) QuickMaths.length(hst)) + (double) 3), (double) Simulation.comfortSens)) * Math.pow((double) 1 - ((double) QuickMaths.dist(hst) / ((double) Simulation.colms + (double) Simulation.rows + (double) 1)), (double) Simulation.comfortSens);
+    	return (Math.pow(1 - ((double) hst.getCost() - (double) QuickMaths.length(hst) + (double) 2) / (((double) Simulation.maxEdgeCost - (double) 1) * ((double) QuickMaths.length(hst)) + (double) 3), (double) Simulation.comfortSens)) * Math.pow((double) 1 - ((double) QuickMaths.dist(hst) / ((double) Simulation.colms + (double) Simulation.rows + (double) 1)), (double) Simulation.comfortSens);
     }
 }
