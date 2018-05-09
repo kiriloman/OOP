@@ -10,18 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Represents a move event of an Individual.
+ */
 public class Move extends EventInd {
 
+    /**
+     * Move constructor.
+     * @param time Execution time
+     */
     public Move(double time) {
         super(time);
     }
 
+    /**
+     * Checks if move's execution time is lower than its host's death time.
+     * If so, adds move to PEC.
+     */
     @Override
     public void addToPec() {
         if (this.getTime() < this.getHost().getDeathTime())
             PEC.addEvent(this);
     }
 
+    /**
+     * Moves the host, updates its parameters, creates and adds a new move to PEC.
+     */
     @Override
     public void execute() {
         Individual host = this.getHost();
@@ -42,6 +56,12 @@ public class Move extends EventInd {
         updateBestPath(host);
     }
 
+    /**
+     * Update host's parameters after it has moved and new position implied a cycle.
+     * @param position New position
+     * @param path New path
+     * @param costPath New cost of the path
+     */
     private void updateHost(Point position, List<Point> path, List<Integer> costPath) {
         Individual host = this.getHost();
         host.setPath(path);
@@ -51,6 +71,11 @@ public class Move extends EventInd {
         host.setComfort(QuickMaths.calculateComfort(host));
     }
 
+    /**
+     * Update host's parameters after it has moved and there was no cycle implied.
+     * @param position New position
+     * @param costToAdd Cost of the new edge
+     */
     private void updateHost(Point position, int costToAdd) {
         Individual host = this.getHost();
         host.setPosition(position);
@@ -59,12 +84,20 @@ public class Move extends EventInd {
         host.setComfort(QuickMaths.calculateComfort(host));
     }
 
+    /**
+     * Creates a new move event with the same host.
+     * Adds it to PEC.
+     */
     private void createAndAddNewMove() {
         Move mvs = new Move(this.getTime() + QuickMaths.moveParameter(this.getHost().getComfort()));
         mvs.setHost(this.getHost());
         mvs.addToPec();
     }
 
+    /**
+     * Updates best path.
+     * @param host Host
+     */
     private void updateBestPath(Individual host) {
         if (host.getPosition().equals(Map.getFinalPoint())) {
             if (!Population.finalPointHit) {

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE simulation SYSTEM "simulation.dtd">
+<simulation finalinst="1000" initpop="400" maxpop="500" comfortsens="3">
+   <grid colsnb="500" rowsnb="600"/> 
+   <initialpoint xinitial="1" yinitial="50"/> 
+   <finalpoint xfinal="201" yfinal="600"/>
+   <specialcostzones num="55">
+      <zone xinitial="5" yinitial="11" xfinal="10" yfinal="12">2</zone>
+	  <zone xinitial="492" yinitial="461" xfinal="8" yfinal="62">9</zone>
+	  <zone xinitial="251" yinitial="351" xfinal="19" yfinal="295">3</zone>
+	  <zone xinitial="43" yinitial="203" xfinal="66" yfinal="140">7</zone>
+	  <zone xinitial="315" yinitial="31" xfinal="68" yfinal="403">7</zone>
+	  <zone xinitial="163" yinitial="466" xfinal="106" yfinal="36">6</zone>
+	  <zone xinitial="489" yinitial="504" xfinal="182" yfinal="192">9</zone>
+	  <zone xinitial="268" yinitial="358" xfinal="110" yfinal="40">9</zone>
+	  <zone xinitial="52" yinitial="300" xfinal="90" yfinal="341">2</zone>
+	  <zone xinitial="401" yinitial="337" xfinal="287" yfinal="137">9</zone>
+	  <zone xinitial="276" yinitial="287" xfinal="114" yfinal="353">6</zone>
+	  <zone xinitial="120" yinitial="2" xfinal="43" yfinal="335">5</zone>
+	  <zone xinitial="321" yinitial="5" xfinal="299" yfinal="126">6</zone>
+	  <zone xinitial="222" yinitial="52" xfinal="67" yfinal="494">6</zone>
+	  <zone xinitial="204" yinitial="403" xfinal="165" yfinal="438">2</zone>
+	  <zone xinitial="218" yinitial="452" xfinal="174" yfinal="110">8</zone>
+	  <zone xinitial="192" yinitial="365" xfinal="449" yfinal="416">6</zone>
+	  <zone xinitial="298" yinitial="60" xfinal="9" yfinal="232">6</zone>
+	  <zone xinitial="329" yinitial="253" xfinal="224" yfinal="190">9</zone>
+	  <zone xinitial="15" yinitial="509" xfinal="226" yfinal="342">3</zone>
+	  <zone xinitial="124" yinitial="70" xfinal="154" yfinal="156">9</zone>
+	  <zone xinitial="118" yinitial="256" xfinal="47" yfinal="146">3</zone>
+	  <zone xinitial="164" yinitial="570" xfinal="19" yfinal="513">9</zone>
+	  <zone xinitial="12" yinitial="354" xfinal="33" yfinal="280">8</zone>
+	  <zone xinitial="53" yinitial="552" xfinal="141" yfinal="497">7</zone>
+	  <zone xinitial="1" yinitial="19" xfinal="136" yfinal="500">2</zone>
+	  <zone xinitial="76" yinitial="576" xfinal="398" yfinal="387">6</zone>
+	  <zone xinitial="284" yinitial="130" xfinal="240" yfinal="496">2</zone>
+	  <zone xinitial="381" yinitial="196" xfinal="102" yfinal="512">6</zone>
+	  <zone xinitial="136" yinitial="478" xfinal="50" yfinal="300">7</zone>
+	  <zone xinitial="190" yinitial="34" xfinal="18" yfinal="204">6</zone>
+	  <zone xinitial="237" yinitial="82" xfinal="448" yfinal="439">4</zone>
+	  <zone xinitial="268" yinitial="272" xfinal="446" yfinal="375">4</zone>
+	  <zone xinitial="272" yinitial="276" xfinal="227" yfinal="199">4</zone>
+	  <zone xinitial="382" yinitial="301" xfinal="393" yfinal="417">6</zone>
+	  <zone xinitial="279" yinitial="580" xfinal="408" yfinal="56">6</zone>
+	  <zone xinitial="72" yinitial="363" xfinal="386" yfinal="60">6</zone>
+	  <zone xinitial="442" yinitial="170" xfinal="326" yfinal="277">2</zone>
+	  <zone xinitial="25" yinitial="313" xfinal="462" yfinal="59">9</zone>
+	  <zone xinitial="32" yinitial="338" xfinal="20" yfinal="135">5</zone>
+	  <zone xinitial="91" yinitial="434" xfinal="212" yfinal="89">3</zone>
+	  <zone xinitial="212" yinitial="454" xfinal="367" yfinal="19">9</zone>
+	  <zone xinitial="312" yinitial="541" xfinal="276" yfinal="65">9</zone>
+	  <zone xinitial="416" yinitial="526" xfinal="161" yfinal="125">4</zone>
+	  <zone xinitial="141" yinitial="209" xfinal="88" yfinal="592">5</zone>
+	  <zone xinitial="233" yinitial="471" xfinal="31" yfinal="330">10</zone>
+	  <zone xinitial="463" yinitial="32" xfinal="146" yfinal="71">9</zone>
+	  <zone xinitial="250" yinitial="450" xfinal="114" yfinal="148">3</zone>
+	  <zone xinitial="284" yinitial="436" xfinal="337" yfinal="277">9</zone>
+	  <zone xinitial="308" yinitial="295" xfinal="371" yfinal="281">2</zone>
+	  <zone xinitial="364" yinitial="366" xfinal="308" yfinal="21">8</zone>
+	  <zone xinitial="75" yinitial="223" xfinal="398" yfinal="142">3</zone>
+	  <zone xinitial="36" yinitial="508" xfinal="287" yfinal="402">2</zone>
+	  <zone xinitial="49" yinitial="547" xfinal="57" yfinal="538">7</zone>
+	  <zone xinitial="341" yinitial="64" xfinal="16" yfinal="470">4</zone>
+	  <zone xinitial="181" yinitial="593" xfinal="317" yfinal="36">5</zone>
+   </specialcostzones>
+   <obstacles num="100">
+   	  <obstacle xpos="82" ypos="31"/>
+	  <obstacle xpos="21" ypos="77"/>
+	  <obstacle xpos="8" ypos="23"/>
+	  <obstacle xpos="9" ypos="64"/>
+	  <obstacle xpos="16" ypos="87"/>
+	  <obstacle xpos="9" ypos="62"/>
+	  <obstacle xpos="27" ypos="56"/>
+	  <obstacle xpos="49" ypos="92"/>
+	  <obstacle xpos="53" ypos="71"/>
+	  <obstacle xpos="81" ypos="61"/>
+	  <obstacle xpos="84" ypos="1"/>
+	  <obstacle xpos="9" ypos="30"/>
+      <obstacle xpos="97" ypos="34"/>
+      <obstacle xpos="87" ypos="83"/>
+      <obstacle xpos="3" ypos="55"/>
+      <obstacle xpos="95" ypos="86"/>
+      <obstacle xpos="14" ypos="80"/>
+      <obstacle xpos="46" ypos="89"/>
+      <obstacle xpos="92" ypos="72"/>
+	  <obstacle xpos="34" ypos="12"/>
+	  <obstacle xpos="71" ypos="44"/>
+	  <obstacle xpos="54" ypos="52"/>
+	  <obstacle xpos="28" ypos="76"/>
+	  <obstacle xpos="94" ypos="3"/>
+	  <obstacle xpos="39" ypos="66"/>
+	  <obstacle xpos="51" ypos="7"/>
+	  <obstacle xpos="1" ypos="14"/>
+	  <obstacle xpos="40" ypos="18"/>
+	  <obstacle xpos="69" ypos="55"/>
+	  <obstacle xpos="92" ypos="0"/>
+	  <obstacle xpos="54" ypos="98"/>
+	  <obstacle xpos="85" ypos="23"/>
+	  <obstacle xpos="86" ypos="8"/>
+	  <obstacle xpos="22" ypos="93"/>
+	  <obstacle xpos="12" ypos="24"/>
+      <obstacle xpos="70" ypos="50"/>
+	  <obstacle xpos="54" ypos="11"/>
+	  <obstacle xpos="57" ypos="87"/>
+	  <obstacle xpos="8" ypos="56"/>
+	  <obstacle xpos="27" ypos="14"/>
+	  <obstacle xpos="16" ypos="11"/>
+	  <obstacle xpos="61" ypos="95"/>
+	  <obstacle xpos="26" ypos="78"/>
+	  <obstacle xpos="74" ypos="27"/>
+	  <obstacle xpos="98" ypos="49"/>
+	  <obstacle xpos="30" ypos="32"/>
+	  <obstacle xpos="41" ypos="78"/>
+	  <obstacle xpos="66" ypos="35"/>
+	  <obstacle xpos="16" ypos="65"/>
+	  <obstacle xpos="18" ypos="20"/>
+	  <obstacle xpos="64" ypos="5"/>
+	  <obstacle xpos="69" ypos="99"/>
+	  <obstacle xpos="85" ypos="36"/>
+	  <obstacle xpos="85" ypos="25"/>
+	  <obstacle xpos="64" ypos="10"/>
+	  <obstacle xpos="41" ypos="12"/>
+      <obstacle xpos="65" ypos="96"/>
+	  <obstacle xpos="60" ypos="61"/>
+	  <obstacle xpos="53" ypos="66"/>
+	  <obstacle xpos="83" ypos="61"/>
+	  <obstacle xpos="77" ypos="58"/>
+	  <obstacle xpos="50" ypos="74"/>
+	  <obstacle xpos="51" ypos="14"/>
+	  <obstacle xpos="15" ypos="6"/>
+	  <obstacle xpos="91" ypos="98"/>
+	  <obstacle xpos="31" ypos="19"/>
+	  <obstacle xpos="49" ypos="23"/>
+	  <obstacle xpos="68" ypos="63"/>
+	  <obstacle xpos="6" ypos="37"/>
+	  <obstacle xpos="37" ypos="99"/>
+	  <obstacle xpos="88" ypos="8"/>
+	  <obstacle xpos="72" ypos="0"/>
+	  <obstacle xpos="71" ypos="20"/>
+	  <obstacle xpos="2" ypos="99"/>
+	  <obstacle xpos="57" ypos="95"/>
+	  <obstacle xpos="75" ypos="77"/>
+	  <obstacle xpos="77" ypos="78"/>
+	  <obstacle xpos="39" ypos="78"/>
+	  <obstacle xpos="85" ypos="34"/>
+	  <obstacle xpos="77" ypos="8"/>
+	  <obstacle xpos="89" ypos="76"/>
+	  <obstacle xpos="28" ypos="74"/>
+	  <obstacle xpos="72" ypos="40"/>
+	  <obstacle xpos="73" ypos="23"/>
+	  <obstacle xpos="20" ypos="94"/>
+	  <obstacle xpos="46" ypos="88"/>
+	  <obstacle xpos="77" ypos="50"/>
+	  <obstacle xpos="33" ypos="95"/>
+	  <obstacle xpos="18" ypos="16"/>
+	  <obstacle xpos="85" ypos="64"/>
+	  <obstacle xpos="56" ypos="18"/>
+	  <obstacle xpos="2" ypos="63"/>
+	  <obstacle xpos="25" ypos="52"/>
+	  <obstacle xpos="28" ypos="26"/>
+	  <obstacle xpos="6" ypos="82"/>
+	  <obstacle xpos="8" ypos="69"/>
+	  <obstacle xpos="87" ypos="80"/>
+	  <obstacle xpos="99" ypos="78"/>
+	  <obstacle xpos="1" ypos="13"/>
+	  <obstacle xpos="90" ypos="11"/>
+	  <obstacle xpos="110" ypos="21"/>
+   </obstacles>
+   <events>
+      <death param="500"/>
+      <reproduction param="1"/>
+      <move param="1"/>
+   </events>
+</simulation>

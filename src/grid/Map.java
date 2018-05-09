@@ -5,13 +5,45 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Represents a Grid.
+ */
 public class Map implements Grid {
+    /**
+     * Keeps track of edges with special costs and
+     * its costs.
+     */
     private HashMap<List<Point>, Integer> specialCosts;
+    /**
+     * A list of Points that are obstacles.
+     */
     private List<Point> obstacles;
-    private static int colms, rows;
+    /**
+     * Number of columns of the Grid.
+     */
+    private static int colms;
+    /**
+     * Number of rows of the Grid.
+     */
+    private static int rows;
+    /**
+     * Final point that should be reached.
+     */
     private static Point finalPoint;
+    /**
+     * An adjacency list with a Point as a key and
+     * a list of (OtherPoint, costOfTheEdge) as value.
+     */
     public static HashMap<Point, List<List<Object>>> map;
 
+    /**
+     * Map constructor.
+     * @param colms Number of columns
+     * @param rows Number of rows
+     * @param obstacles List of points that are obstacles
+     * @param specialCosts Special cost zones
+     * @param finalPoint Final point
+     */
     public Map(int colms, int rows, List<Point> obstacles, HashMap<List<Point>, Integer> specialCosts, Point finalPoint) {
         Map.colms = colms;
         Map.rows = rows;
@@ -21,7 +53,12 @@ public class Map implements Grid {
         map = new HashMap<>();
     }
 
-    public int edgeMaxCost() {
+    /**
+     * Finds an edge of Grid with highest cost and returns the cost.
+     * @return Highest cost of an edge
+     */
+    @Override
+    public int getEdgesMaxCost() {
         int maxCost = 0;
         for (Integer i : specialCosts.values()) {
             if (i > maxCost)
@@ -30,6 +67,9 @@ public class Map implements Grid {
         return maxCost;
     }
 
+    /**
+     * Represents the Grid as an adjacency list.
+     */
     @Override
     public void createGrid() {
         Point fromPoint, toPoint;
@@ -38,11 +78,13 @@ public class Map implements Grid {
         for (int x = 1; x <= colms; x++) {
             for (int y = 1; y <= rows; y++) {
                 fromPoint = new Point(x, y);
-                // se este ponto nao e um obstaculo entao vamos buscar a lista de adjacencia
+                // If fromPoint is not an obstacle then we create its adjacency list
+                // The adjacent points are added in clockwise order beginning at top.
                 if (!obstacles.contains(fromPoint)) {
                     adjList = new ArrayList<>();
 
-                    //ve se o ponto em cima nao ta fora da grid nem é um obstaculo
+                    // Checks if a point above fromPoint is not an obstacle nor is out of the grid.
+                    // If so, adds to adjacency list of fromPoint
                     if (y + 1 <= rows && !obstacles.contains(new Point(x, y + 1))) {
                         toPoint = new Point(x, y + 1);
                         edge = new ArrayList<>();
@@ -51,7 +93,8 @@ public class Map implements Grid {
                         adjList.add(edge);
                     }
 
-                    //ve se o ponto a direita nao ta fora da grid nem é um obstaculo
+                    // Checks if right point of fromPoint is not an obstacle nor is out of the grid.
+                    // If so, adds to adjacency list of fromPoint
                     if (x + 1 <= colms && !obstacles.contains(new Point(x + 1, y))) {
                         toPoint = new Point(x + 1, y);
                         edge = new ArrayList<>();
@@ -60,7 +103,8 @@ public class Map implements Grid {
                         adjList.add(edge);
                     }
 
-                    //ve se o ponto em baixo nao ta fora da grid nem é um obstaculo
+                    // Checks if point below fromPoint is not an obstacle nor is out of the grid.
+                    // If so, adds to adjacency list of fromPoint
                     if (y - 1 > 0 && !obstacles.contains(new Point(x, y - 1))) {
                         toPoint = new Point(x, y - 1);
                         edge = new ArrayList<>();
@@ -69,7 +113,8 @@ public class Map implements Grid {
                         adjList.add(edge);
                     }
 
-                    //ve se o ponto a esquerda nao ta fora da grid nem é um obstaculo
+                    // Checks if left point of fromPoint is not an obstacle nor is out of the grid.
+                    // If so, adds to adjacency list of fromPoint
                     if (x - 1 > 0 && !obstacles.contains(new Point(x - 1, y))) {
                         toPoint = new Point(x - 1, y);
                         edge = new ArrayList<>();
@@ -78,13 +123,21 @@ public class Map implements Grid {
                         adjList.add(edge);
                     }
 
+                    // Adds the fromPoint and its adjacency list to Grid representation.
                     map.put(fromPoint, adjList);
                 }
             }
         }
     }
 
-    private int getEdgeCost(Point from, Point to) {
+    /**
+     * Given an edge (from, to) returns the cost of the edge.
+     * @param from From point
+     * @param to To point
+     * @return Edge cost
+     */
+    @Override
+    public int getEdgeCost(Point from, Point to) {
         List<Point> edge = new ArrayList<>();
         edge.add(from);
         edge.add(to);
@@ -94,6 +147,10 @@ public class Map implements Grid {
         return 1;
     }
 
+    /**
+     * Gets final point.
+     * @return Final point
+     */
     public static Point getFinalPoint() {
         return finalPoint;
     }

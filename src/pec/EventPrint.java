@@ -2,14 +2,28 @@ package pec;
 
 import population.Population;
 
+/**
+ * Represents an observation event with no host.
+ */
 public class EventPrint extends Event {
+    /**
+     * Number of observations.
+     */
     private static int observationNum;
 
+    /**
+     * EventPrint constructor.
+     * @param time Execution time
+     */
     public EventPrint(double time) {
         super(time);
         observationNum = 0;
     }
 
+    /**
+     * Prints out data of an observation.
+     */
+    @Override
     public void execute() {
         observationNum++;
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "Observation " + observationNum + ":", "", ""));
