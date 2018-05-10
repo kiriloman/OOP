@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE simulation SYSTEM "simulation.dtd">
-<simulation finalinst="1000" initpop="400" maxpop="500" comfortsens="3">
+<simulation finalinst="10000" initpop="400" maxpop="500" comfortsens="3">
    <grid colsnb="500" rowsnb="600"/> 
-   <initialpoint xinitial="1" yinitial="50"/> 
-   <finalpoint xfinal="201" yfinal="600"/>
+   <initialpoint xinitial="250" yinitial="200"/> 
+   <finalpoint xfinal="400" yfinal="301"/>
    <specialcostzones num="55">
       <zone xinitial="5" yinitial="11" xfinal="10" yfinal="12">2</zone>
 	  <zone xinitial="492" yinitial="461" xfinal="8" yfinal="62">9</zone>

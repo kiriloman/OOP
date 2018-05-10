@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE simulation SYSTEM "simulation.dtd">
-<simulation finalinst="100" initpop="10" maxpop="500" comfortsens="3">
+<simulation finalinst="100" initpop="10" maxpop="500" comfortsens="3"> 
    <grid colsnb="9" rowsnb="8"/> 
    <initialpoint xinitial="1" yinitial="2"/> 
    <finalpoint xfinal="7" yfinal="8"/>

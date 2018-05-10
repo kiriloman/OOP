@@ -42,7 +42,7 @@ public class Parser {
      * Reads number of rows of a grid from the file.
      * @return Number of rows
      */
-    protected int readNumberOfRows() {
+    int readNumberOfRows() {
         return Integer.valueOf(document.getElementsByTagName("grid").item(0).getAttributes().getNamedItem("rowsnb").getTextContent());
     }
 
@@ -50,7 +50,7 @@ public class Parser {
      * Reads number of columns of a grid from the file.
      * @return Number of columns
      */
-    protected int readNumberOfColumns() {
+    int readNumberOfColumns() {
         return Integer.valueOf(document.getElementsByTagName("grid").item(0).getAttributes().getNamedItem("colsnb").getTextContent());
     }
 
@@ -58,7 +58,7 @@ public class Parser {
      * Reads final instant from the file.
      * @return Final instant
      */
-    protected int readFinalInstant() {
+    int readFinalInstant() {
         return Integer.valueOf(document.getElementsByTagName("simulation").item(0).getAttributes().getNamedItem("finalinst").getTextContent());
     }
 
@@ -66,7 +66,7 @@ public class Parser {
      * Reads size of initial population.
      * @return Size of initial population
      */
-    protected int readInitialPopulation() {
+    int readInitialPopulation() {
         return Integer.valueOf(document.getElementsByTagName("simulation").item(0).getAttributes().getNamedItem("initpop").getTextContent());
     }
 
@@ -74,7 +74,7 @@ public class Parser {
      * Reads maximum size of a population.
      * @return Maximum size of a population
      */
-    protected int readMaxPopulation() {
+    int readMaxPopulation() {
         return Integer.valueOf(document.getElementsByTagName("simulation").item(0).getAttributes().getNamedItem("maxpop").getTextContent());
     }
 
@@ -82,7 +82,7 @@ public class Parser {
      * Reads comfort sensitivity.
      * @return Comfort sensitivity
      */
-    protected int readComfortSens() {
+    int readComfortSens() {
         return Integer.valueOf(document.getElementsByTagName("simulation").item(0).getAttributes().getNamedItem("comfortsens").getTextContent());
     }
 
@@ -90,7 +90,7 @@ public class Parser {
      * Reads mu value.
      * @return Mu
      */
-    protected int readMu() {
+    int readMu() {
         return Integer.valueOf(document.getElementsByTagName("death").item(0).getAttributes().getNamedItem("param").getTextContent());
     }
 
@@ -98,7 +98,7 @@ public class Parser {
      * Reads rho value.
      * @return Rho
      */
-    protected int readRho() {
+    int readRho() {
         return Integer.valueOf(document.getElementsByTagName("reproduction").item(0).getAttributes().getNamedItem("param").getTextContent());
     }
 
@@ -106,7 +106,7 @@ public class Parser {
      * Reads delta value.
      * @return Delta
      */
-    protected int readDelta() {
+    int readDelta() {
         return Integer.valueOf(document.getElementsByTagName("move").item(0).getAttributes().getNamedItem("param").getTextContent());
     }
 
@@ -114,7 +114,7 @@ public class Parser {
      * Reads initial point.
      * @return Initial point
      */
-    protected Point readInitialPoint() {
+    Point readInitialPoint() {
         int coordX = Integer.valueOf(document.getElementsByTagName("initialpoint").item(0).getAttributes().getNamedItem("xinitial").getTextContent());
         int coordY = Integer.valueOf(document.getElementsByTagName("initialpoint").item(0).getAttributes().getNamedItem("yinitial").getTextContent());
         return new Point(coordX, coordY);
@@ -124,7 +124,7 @@ public class Parser {
      * Reads final point.
      * @return Final point
      */
-    protected Point readFinalPoint() {
+    Point readFinalPoint() {
         int coordX = Integer.valueOf(document.getElementsByTagName("finalpoint").item(0).getAttributes().getNamedItem("xfinal").getTextContent());
         int coordY = Integer.valueOf(document.getElementsByTagName("finalpoint").item(0).getAttributes().getNamedItem("yfinal").getTextContent());
         return new Point(coordX, coordY);
@@ -134,7 +134,7 @@ public class Parser {
      * Reads zones with special costs.
      * @return Zones with special costs and its costs
      */
-    protected HashMap<List<Point>, Integer> readSpecialCosts() {
+    HashMap<List<Point>, Integer> readSpecialCosts() {
         HashMap<List<Point>, Integer> specialZones = new HashMap<>();
         List<Point> edge;
         int coordX, coordY, cost;
@@ -212,7 +212,7 @@ public class Parser {
      * Reads points that are obstacles.
      * @return List of obstacles
      */
-    protected List<Point> readObstacles() {
+    List<Point> readObstacles() {
         List<Point> obstacles = new ArrayList<>();
         NodeList nodeList = document.getElementsByTagName("obstacle");
         int coordX, coordY;
@@ -228,7 +228,7 @@ public class Parser {
      * Prints best fit individual's path.
      * @param path Path to print
      */
-    protected void printResult(List<Point> path) {
+    void printResult(List<Point> path) {
         System.out.println("Path of the best fit individual = " + path.toString().replace("[", "{").replace("]", "}"));
     }
 }
