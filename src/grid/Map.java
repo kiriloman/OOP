@@ -59,7 +59,7 @@ public class Map implements Grid {
      */
     @Override
     public int getEdgesMaxCost() {
-        int maxCost = 0;
+        int maxCost = 1;
         for (Integer i : specialCosts.values()) {
             if (i > maxCost)
                 maxCost = i;

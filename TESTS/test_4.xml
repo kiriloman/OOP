@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE simulation SYSTEM "simulation.dtd">
-<simulation finalinst="100" initpop="10" maxpop="500" comfortsens="3">
+<simulation finalinst="100" initpop="1000" maxpop="10000" comfortsens="3"> 
    <grid colsnb="10" rowsnb="12"/> 
    <initialpoint xinitial="1" yinitial="1"/> 
    <finalpoint xfinal="10" yfinal="12"/>
@@ -18,7 +18,7 @@
       <obstacle xpos="2" ypos="8"/>
       <obstacle xpos="2" ypos="7"/>
       <obstacle xpos="2" ypos="6"/>
-      <obstacle xpos="2" ypos="5"/>
+      <obstacle xpos="1" ypos="5"/>
       <obstacle xpos="3" ypos="3"/>
       <obstacle xpos="4" ypos="3"/>
       <obstacle xpos="5" ypos="3"/>
@@ -38,7 +38,7 @@
       <obstacle xpos="10" ypos="10"/>
    </obstacles>
    <events>
-      <death param="10"/>
+      <death param="20"/>
       <reproduction param="1"/>
       <move param="1"/>
    </events>
