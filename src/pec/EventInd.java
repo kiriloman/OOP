@@ -1,6 +1,7 @@
 package pec;
 
 import population.Individual;
+import population.Population;
 
 /**
  * Represents an event that has an Individual that is its host.
@@ -9,14 +10,16 @@ public class EventInd extends Event {
     /**
      * Event's host.
      */
-    private Individual host;
+    protected Individual host;
 
     /**
      * EventInd constructor.
      * @param time Execution time
+     * @param population Population host belongs to
+     * @param pec PEC to add event to
      */
-    EventInd(double time) {
-        super(time);
+    EventInd(double time, Population population, PEC pec) {
+        super(time, population, pec);
     }
 
     /**
@@ -26,7 +29,7 @@ public class EventInd extends Event {
     @Override
     public void removeIfItsHostDies(Individual individual) {
         if (this.getHost().equals(individual)) {
-            PEC.eventQueue.remove(this);
+            pec.eventQueue.remove(this);
         }
     }
 

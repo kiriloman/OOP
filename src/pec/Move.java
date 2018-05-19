@@ -4,7 +4,6 @@ import grid.Map;
 import grid.Point;
 import population.Individual;
 import population.Population;
-import simulation.QuickMaths;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +13,14 @@ import java.util.Random;
  * Represents a move event of an Individual.
  */
 public class Move extends EventInd {
-
     /**
      * Move constructor.
      * @param time Execution time
+     * @param population Population host belongs to
+     * @param pec PEC to add event to
      */
-    public Move(double time) {
-        super(time);
+    public Move(double time, Population population, PEC pec) {
+        super(time, population, pec);
     }
 
     /**
@@ -29,8 +29,8 @@ public class Move extends EventInd {
      */
     @Override
     public void addToPec() {
-        if (this.getTime() < this.getHost().getDeathTime())
-            PEC.addEvent(this);
+        if (this.getTime() < host.getDeathTime())
+            pec.addEvent(this);
     }
 
     /**
@@ -38,7 +38,6 @@ public class Move extends EventInd {
      */
     @Override
     public void execute() {
-        Individual host = this.getHost();
         List<List<Object>> adjacentNodes = Map.map.get(host.getPosition());
         Random random = new Random();
         int randomIndex = random.nextInt(adjacentNodes.size());
@@ -63,12 +62,11 @@ public class Move extends EventInd {
      * @param costPath New cost of the path
      */
     private void updateHost(Point position, List<Point> path, List<Integer> costPath) {
-        Individual host = this.getHost();
         host.setPath(path);
         host.setCostPath(costPath);
         host.setPosition(position);
         host.setCost(host.getCostPath().get(host.getCostPath().size() - 1));
-        host.setComfort(QuickMaths.calculateComfort(host));
+        host.setComfort(quickMaths.calculateComfort(host));
     }
 
     /**
@@ -77,11 +75,10 @@ public class Move extends EventInd {
      * @param costToAdd Cost of the new edge
      */
     private void updateHost(Point position, int costToAdd) {
-        Individual host = this.getHost();
         host.setPosition(position);
         host.addToPath(position);
         host.addToCostPath(host.getCost() + costToAdd);
-        host.setComfort(QuickMaths.calculateComfort(host));
+        host.setComfort(quickMaths.calculateComfort(host));
     }
 
     /**
@@ -89,8 +86,8 @@ public class Move extends EventInd {
      * Adds it to PEC.
      */
     private void createAndAddNewMove() {
-        Move mvs = new Move(this.getTime() + QuickMaths.moveParameter(this.getHost().getComfort()));
-        mvs.setHost(this.getHost());
+        Move mvs = new Move(this.getTime() + quickMaths.moveParameter(host.getComfort()), population, pec);
+        mvs.setHost(host);
         mvs.addToPec();
     }
 
@@ -99,24 +96,24 @@ public class Move extends EventInd {
      * @param host Host
      */
     private void updateBestPath(Individual host) {
-        if (host.getPosition().equals(Map.getFinalPoint())) {
-            if (!Population.finalPointHit) {
-                Population.finalPointHit = true;
-                Population.bestPathCost = Integer.MAX_VALUE;
-                Population.bestPathComfort = -1;
-                Population.bestPath = new ArrayList<>();
+        if (host.getPosition().equals(population.finalPoint)) {
+            if (!population.finalPointHit) {
+                population.finalPointHit = true;
+                population.bestPathCost = Integer.MAX_VALUE;
+                population.bestPathComfort = -1;
+                population.bestPath = new ArrayList<>();
             }
-            if (host.getCost() < Population.bestPathCost) {
-                Population.bestPathCost = host.getCost();
-                Population.bestPathComfort = host.getComfort();
-                Population.bestPath = new ArrayList<>(host.getPath());
+            if (host.getCost() < population.bestPathCost) {
+                population.bestPathCost = host.getCost();
+                population.bestPathComfort = host.getComfort();
+                population.bestPath = new ArrayList<>(host.getPath());
             }
         } else {
-            if (!Population.finalPointHit) {
-                if (host.getComfort() > Population.bestPathComfort) {
-                    Population.bestPathCost = host.getCost();
-                    Population.bestPathComfort = host.getComfort();
-                    Population.bestPath = new ArrayList<>(host.getPath());
+            if (!population.finalPointHit) {
+                if (host.getComfort() > population.bestPathComfort) {
+                    population.bestPathCost = host.getCost();
+                    population.bestPathComfort = host.getComfort();
+                    population.bestPath = new ArrayList<>(host.getPath());
                 }
             }
         }
