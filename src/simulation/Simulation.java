@@ -2,6 +2,7 @@ package simulation;
 
 import grid.Map;
 import grid.Point;
+import maths.QuickMaths;
 import org.xml.sax.SAXException;
 import pec.*;
 import population.Individual;
@@ -21,75 +22,80 @@ public class Simulation {
     /**
      * Parameter used in death event.
      */
-    static int mu;
+    public static int mu;
     /**
      * Parameter used in move event.
      */
-    static int delta;
+    public static int delta;
     /**
      * Parameter used in reproduction event.
      */
-    static int rho;
+    public static int rho;
     /**
      * Number of columns of the grid the simulation runs on.
      */
-    static int colms;
+    public static int colms;
     /**
      * Number of rows of the grid the simulation runs on.
      */
-    static int rows;
+    public static int rows;
     /**
      * Comfort sensitivity.
      */
-    static int comfortSens;
+    public static int comfortSens;
     /**
      * Maximum cost of an edge of the grid the simulation runs on.
      */
-    static int maxEdgeCost;
+    public static int maxEdgeCost;
     /**
      * Initial point of the grid the simulation runs on.
      */
-    static Point initialPoint;
+    private Point initialPoint;
     /**
      * Final point of the grid the simulation runs on.
      */
-    static Point finalPoint;
+    public static Point finalPoint;
     /**
      * Initial size of the population that simulation is using.
      */
-    private static int initialPop;
+    private int initialPop;
     /**
      * Maximum size of the population that simulation is using.
      */
-    private static int maxPop;
+    private int maxPop;
     /**
      * Simulation's final instant.
      */
-    private static int finalInst;
+    private int finalInst;
     /**
      * Zones with special costs of the grid the simulation runs on.
      */
-    private static HashMap<List<Point>, Integer> specialCostZones;
+    private HashMap<List<Point>, Integer> specialCostZones;
     /**
      * Obstacles of the grid the simulation runs on.
      */
-    private static List<Point> obstacles;
+    private List<Point> obstacles;
     /**
      * A parser used to parse a file before simulation.
      */
-    private static Parser parser;
+    private Parser parser;
     /**
      * Population that simulations is using.
      */
-    private static Population population;
+    public Population population;
     /**
      * Map that simulations is using.
      */
-    private static Map map;
+    private Map map;
     /**
      * PEC that simulations is using.
      */
-    private static PEC pec;
+    private PEC pec;
+
+    /**
+     * QuickMaths that simulations is using.
+     */
+    private QuickMaths quickMaths;
 
     /**
      * Simulation constructor.
@@ -100,10 +106,11 @@ public class Simulation {
      */
     public Simulation(String filePath) throws IOException, SAXException, ParserConfigurationException {
         parseFile(filePath);
-        map = new Map(colms, rows, obstacles, specialCostZones, finalPoint);
+        map = new Map(colms, rows, obstacles, specialCostZones);
         maxEdgeCost = map.getEdgesMaxCost();
         population = new Population(initialPop);
         pec = new PEC(finalInst);
+        quickMaths = new QuickMaths();
     }
 
     /**
@@ -113,7 +120,7 @@ public class Simulation {
      * @throws SAXException Parser exception
      * @throws IOException IO exception
      */
-    private static void parseFile(String filePath) throws ParserConfigurationException, SAXException, IOException {
+    private void parseFile(String filePath) throws ParserConfigurationException, SAXException, IOException {
         parser = new Parser(filePath);
         mu = parser.readMu();
         delta = parser.readDelta();
@@ -133,19 +140,19 @@ public class Simulation {
     /**
      * Creates a map.
      */
-    private static void createMap() {
+    private void createMap() {
         map.createGrid();
     }
 
     /**
      * Creates observation events and adds them to PEC.
      */
-    private static void createAndAddPrintEvents() {
+    private void createAndAddPrintEvents() {
         Event printEvent;
         double timeInterval = (double) finalInst / 20;
         for (double t = timeInterval; t <= finalInst; t++) {
             if (t % timeInterval == 0) {
-                printEvent = new EventPrint(t);
+                printEvent = new EventPrint(t, population, pec);
                 printEvent.addToPec();
             }
         }
@@ -155,10 +162,10 @@ public class Simulation {
      * Generates initial events for a given individual and adds them to PEC.
      * @param individual Individual
      */
-    private static void generateInitialEvents(Individual individual) {
-        Move m = new Move(QuickMaths.moveParameter(individual.getComfort()));
-        Reproduction r = new Reproduction(QuickMaths.reproductionParameter(individual.getComfort()));
-        Death d = new Death(QuickMaths.deathParameter(individual.getComfort()));
+    private void generateInitialEvents(Individual individual) {
+        Move m = new Move(quickMaths.moveParameter(individual.getComfort()), population, pec);
+        Reproduction r = new Reproduction(quickMaths.reproductionParameter(individual.getComfort()), population, pec);
+        Death d = new Death(quickMaths.deathParameter(individual.getComfort()), population, pec);
 
         d.setHost(individual);
         m.setHost(individual);
@@ -172,15 +179,15 @@ public class Simulation {
     /**
      * Initializes simulation by creating a new Map, Population, PEC and events.
      */
-    private static void initializeSimulation() {
+    private void initializeSimulation() {
         createMap();
-
+        population.setFinalPoint(finalPoint);
         for (int ind = 0; ind < population.size; ind++) {
             Individual individual = population.individuals.get(ind);
             individual.setPosition(initialPoint);
             individual.addToPath(initialPoint);
             individual.addToCostPath(0);
-            individual.setComfort(QuickMaths.calculateComfort(individual));
+            individual.setComfort(quickMaths.calculateComfort(individual));
 
             generateInitialEvents(individual);
         }
@@ -193,21 +200,21 @@ public class Simulation {
      * Partially destroys the population if population size is bigger or equal
      * to its maximum size.
      */
-    private static void epidemic() {
-        if (Population.size >= maxPop) {
+    private void epidemic() {
+        if (population.size >= maxPop) {
             // Sorts individuals from best comfort to worst comfort
-            sort(Population.individuals);
+            sort(population.individuals);
 
             // Creates the list of individuals that survive for sure
             List<Individual> survivors = new ArrayList<>();
             for (int s = 0; s < 5; s++) {
-                survivors.add(Population.individuals.get(s));
+                survivors.add(population.individuals.get(s));
             }
 
             // Epidemic strikes!
-            for (int i = 0; i < Population.size; i++) {
-                if (!survivors.contains(Population.individuals.get(i)) && (Population.individuals.get(i).getComfort() <= Math.random())) {
-                    Population.killIndividual(Population.individuals.get(i));
+            for (int i = 0; i < population.size; i++) {
+                if (!survivors.contains(population.individuals.get(i)) && (population.individuals.get(i).getComfort() <= Math.random())) {
+                    population.killIndividual(population.individuals.get(i), pec);
                     i--;
                 }
             }
@@ -218,7 +225,7 @@ public class Simulation {
      * Sorts a list of individuals by comfort, from highest to lowest.
      * @param individuals List of individuals to sort
      */
-    private static void sort(List<Individual> individuals) {
+    private void sort(List<Individual> individuals) {
         Collections.sort(individuals, (i1, i2) -> {
             double comf1 = i1.getComfort();
             double comf2 = i2.getComfort();
@@ -229,14 +236,14 @@ public class Simulation {
     /**
      * Simulates.
      */
-    public static void simulate() {
+    public void simulate() {
         initializeSimulation();
 
-        while (PEC.eventQueue.size() != 0) {
+        while (pec.eventQueue.size() != 0) {
             epidemic();
             pec.executeEvent();
         }
 
-        parser.printResult(Population.bestPath);
+        parser.printResult(population.bestPath);
     }
 }

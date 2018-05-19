@@ -14,9 +14,11 @@ public class EventPrint extends Event {
     /**
      * EventPrint constructor.
      * @param time Execution time
+     * @param population Population about which observation will be printed
+     * @param pec PEC to add event to
      */
-    public EventPrint(double time) {
-        super(time);
+    public EventPrint(double time, Population population, PEC pec) {
+        super(time, population, pec);
         observationNum = 0;
     }
 
@@ -29,12 +31,12 @@ public class EventPrint extends Event {
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "Observation " + observationNum + ":", "", ""));
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Present instant:", this.getTime()));
         System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Number of realized events:", PEC.numberOfEvents));
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Population size:", Population.size));
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Final point has been hit:", Population.finalPointHit));
-        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Path of the best fit individual:", Population.bestPath.toString().replace("[", "{").replace("]", "}")));
-        if (Population.finalPointHit)
-            System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Cost:", (int) Population.bestPathCost));
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Population size:", population.size));
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Final point has been hit:", population.finalPointHit));
+        System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Path of the best fit individual:", population.bestPath.toString().replace("[", "{").replace("]", "}")));
+        if (population.finalPointHit)
+            System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Cost:", (int) population.bestPathCost));
         else
-            System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Comfort:", Population.bestPathComfort));
+            System.out.print(String.format("%1$-15s%2$-35s%3$s\n", "", "Comfort:", population.bestPathComfort));
     }
 }

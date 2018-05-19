@@ -6,23 +6,23 @@ import population.Population;
  * Represents a death event of an Individual.
  */
 public class Death extends EventInd {
-
     /**
      * Death constructor.
      * @param time Execution time
+     * @param population Population host belongs to
+     * @param pec PEC to add event to
      */
-    public Death(double time) {
-        super(time);
+    public Death(double time, Population population, PEC pec) {
+        super(time, population, pec);
     }
 
     /**
-     * Sets its host death time to this event's execution time.
-     * Adds this event to PEC.
+     * Sets its host death time to this event's execution time and adds this event to PEC.
      */
     @Override
     public void addToPec() {
         this.getHost().setDeathTime(this.getTime());
-        PEC.addEvent(this);
+        pec.addEvent(this);
     }
 
     /**
@@ -30,6 +30,6 @@ public class Death extends EventInd {
      */
     @Override
     public void execute() {
-        Population.removeIndividual(this.getHost());
+        population.removeIndividual(host);
     }
 }

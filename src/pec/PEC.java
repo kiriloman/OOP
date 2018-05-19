@@ -10,11 +10,11 @@ public class PEC {
     /**
      * Final instant of simulation until which events can occur.
      */
-    private static int finalInstant;
+    private int finalInstant;
     /**
      * Represents a queue of events ordered by their execution times.
      */
-    public static List<Event> eventQueue;
+    public List<Event> eventQueue;
     /**
      * Number of events already executed.
      */
@@ -25,7 +25,7 @@ public class PEC {
      * @param finalInstant Instant until which events can occur
      */
     public PEC(int finalInstant) {
-        PEC.finalInstant = finalInstant;
+        this.finalInstant = finalInstant;
         eventQueue = new ArrayList<>();
         numberOfEvents = 0;
     }
@@ -34,7 +34,7 @@ public class PEC {
      * Adds given event to the event queue.
      * @param event An event to add
      */
-    public static void addEvent(Event event) {
+    public void addEvent(Event event) {
         // Checks if event's execution time is lower or equal to final instant time
         if (event.getTime() <= finalInstant) {
             // If the event queue is empty, add event to queue

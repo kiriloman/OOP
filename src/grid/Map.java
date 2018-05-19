@@ -21,15 +21,11 @@ public class Map implements Grid {
     /**
      * Number of columns of the Grid.
      */
-    private static int colms;
+    private int colms;
     /**
      * Number of rows of the Grid.
      */
-    private static int rows;
-    /**
-     * Final point that should be reached.
-     */
-    private static Point finalPoint;
+    private int rows;
     /**
      * An adjacency list with a Point as a key and
      * a list of (OtherPoint, costOfTheEdge) as value.
@@ -42,12 +38,10 @@ public class Map implements Grid {
      * @param rows Number of rows
      * @param obstacles List of points that are obstacles
      * @param specialCosts Special cost zones
-     * @param finalPoint Final point
      */
-    public Map(int colms, int rows, List<Point> obstacles, HashMap<List<Point>, Integer> specialCosts, Point finalPoint) {
-        Map.colms = colms;
-        Map.rows = rows;
-        Map.finalPoint = finalPoint;
+    public Map(int colms, int rows, List<Point> obstacles, HashMap<List<Point>, Integer> specialCosts) {
+        this.colms = colms;
+        this.rows = rows;
         this.specialCosts = specialCosts;
         this.obstacles = obstacles;
         map = new HashMap<>();
@@ -145,13 +139,5 @@ public class Map implements Grid {
         Collections.swap(edge, 0, 1);
         if (specialCosts.get(edge) != null) return specialCosts.get(edge);
         return 1;
-    }
-
-    /**
-     * Gets final point.
-     * @return Final point
-     */
-    public static Point getFinalPoint() {
-        return finalPoint;
     }
 }

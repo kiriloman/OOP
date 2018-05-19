@@ -13,31 +13,35 @@ public class Population {
     /**
      * List of individuals of population.
      */
-    public static List<Individual> individuals;
+    public List<Individual> individuals;
     /**
      * Number of individuals.
      */
-    public static int size;
+    public int size;
     /**
      * Id of next child to be added to population.
      */
-    public static int nextChildId;
+    public int nextChildId;
     /**
      * Current best path between all individuals.
      */
-    public static List<Point> bestPath;
+    public List<Point> bestPath;
     /**
      * Current best path's cost.
      */
-    public static double bestPathCost;
+    public double bestPathCost;
     /**
      * Individual's, whos path is the current best path, comfort.
      */
-    public static double bestPathComfort;
+    public double bestPathComfort;
     /**
      * Informs if final point has been hit by some path or not.
      */
-    public static boolean finalPointHit;
+    public boolean finalPointHit;
+    /**
+     * Final point that should be reached.
+     */
+    public Point finalPoint;
 
     /**
      * Population constructor.
@@ -61,7 +65,7 @@ public class Population {
      * Adds an individual to population.
      * @param individual Individual to add
      */
-    public static void addIndividual(Individual individual) {
+    public void addIndividual(Individual individual) {
         individuals.add(individual);
         size++;
         nextChildId++;
@@ -71,7 +75,7 @@ public class Population {
      * Removes a given individual from population.
      * @param individual Individual to remove
      */
-    public static void removeIndividual(Individual individual) {
+    public void removeIndividual(Individual individual) {
         individuals.remove(individual);
         size--;
     }
@@ -80,11 +84,20 @@ public class Population {
      * Removes a given individual from population and also
      * removes all its events from PEC.
      * @param individual Individual to kill
+     * @param pec PEC from which all individual's events will be removed
      */
-    public static void killIndividual(Individual individual) {
+    public void killIndividual(Individual individual, PEC pec) {
         removeIndividual(individual);
-        for (int i = 0; i < PEC.eventQueue.size(); i++) {
-            PEC.eventQueue.get(i).removeIfItsHostDies(individual);
+        for (int i = 0; i < pec.eventQueue.size(); i++) {
+            pec.eventQueue.get(i).removeIfItsHostDies(individual);
         }
+    }
+
+    /**
+     * Sets final point individuals should reach.
+     * @param finalPoint A final point
+     */
+    public void setFinalPoint(Point finalPoint) {
+        this.finalPoint = finalPoint;
     }
 }

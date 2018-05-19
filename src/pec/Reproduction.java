@@ -2,18 +2,19 @@ package pec;
 
 import population.Individual;
 import population.Population;
-import simulation.QuickMaths;
 
 /**
  * Represents a reproduction event of an Individual.
  */
 public class Reproduction extends EventInd {
     /**
-     * Reproduction constructor
+     * Reproduction constructor.
      * @param time Execution time
+     * @param population Population host belongs to
+     * @param pec PEC to add event to
      */
-    public Reproduction(double time) {
-        super(time);
+    public Reproduction(double time, Population population, PEC pec) {
+        super(time, population, pec);
     }
 
     /**
@@ -22,8 +23,8 @@ public class Reproduction extends EventInd {
      */
     @Override
     public void addToPec() {
-        if (this.getTime() < this.getHost().getDeathTime())
-            PEC.addEvent(this);
+        if (this.getTime() < host.getDeathTime())
+            pec.addEvent(this);
     }
 
     /**
@@ -42,12 +43,12 @@ public class Reproduction extends EventInd {
      * @return Host's child
      */
     private Individual createChild() {
-        Individual parent = this.getHost();
+        Individual parent = host;
         //path do child
         double parameter1 = 0.9 * ((double) parent.getPath().size());
         double parameter2 = 0.1 * parent.getComfort();
         int childPathLength = (int) Math.ceil(parameter1 + parameter2);
-        Individual child = new Individual(Population.nextChildId);
+        Individual child = new Individual(population.nextChildId);
         for (int j = 0; j < childPathLength; j++) {
             child.addToPath(parent.getPath().get(j));
         }
@@ -57,8 +58,8 @@ public class Reproduction extends EventInd {
         for (int j = 0; j < childPathLength; j++) {
             child.addToCostPath(parent.getCostPath().get(j));
         }
-        child.setComfort(QuickMaths.calculateComfort(child));
-        Population.addIndividual(child);
+        child.setComfort(quickMaths.calculateComfort(child));
+        population.addIndividual(child);
         return child;
     }
 
@@ -69,9 +70,9 @@ public class Reproduction extends EventInd {
      */
     private void createAndAddChildEvents(Individual child) {
         double childComfort = child.getComfort();
-        Move cMove = new Move(this.getTime() + QuickMaths.moveParameter(childComfort));
-        Reproduction cReproduction = new Reproduction(this.getTime() + QuickMaths.reproductionParameter(childComfort));
-        Death cDeath = new Death(this.getTime() + QuickMaths.deathParameter(childComfort));
+        Move cMove = new Move(this.getTime() + quickMaths.moveParameter(childComfort), population, pec);
+        Reproduction cReproduction = new Reproduction(this.getTime() + quickMaths.reproductionParameter(childComfort), population, pec);
+        Death cDeath = new Death(this.getTime() + quickMaths.deathParameter(childComfort), population, pec);
 
         cMove.setHost(child);
         cReproduction.setHost(child);
@@ -86,8 +87,7 @@ public class Reproduction extends EventInd {
      * Creates a new reproduction event with the same host and adds it to PEC.
      */
     private void createAndAddParentReproduction() {
-        Individual host = this.getHost();
-        Reproduction pReproduction = new Reproduction(this.getTime() + QuickMaths.moveParameter(host.getComfort()));
+        Reproduction pReproduction = new Reproduction(this.getTime() + quickMaths.moveParameter(host.getComfort()), population, pec);
         pReproduction.setHost(host);
         pReproduction.addToPec();
     }
